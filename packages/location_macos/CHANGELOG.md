@@ -1,3 +1,14 @@
+## 5.0.0-dev.4
+
+ - **FEAT**: improve PermissionStatus.
+ - **FEAT**(macos): ready version macos.
+ - **FEAT**: remove useless tests thanks to Pigeon.
+ - **FEAT**: first version 5 commit.
+ - **DOCS**: writing docs for version 5.
+ - **DOCS**: writing docs for version 5.
+ - **DOCS**: update documentation.
+ - **DOCS**: add documentation to code.
+
 ## 5.0.0-dev.3
 
  - **FEAT**: improve PermissionStatus.

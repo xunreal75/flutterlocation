@@ -1,3 +1,27 @@
+## 5.0.0-dev.5
+
+ - **FEAT**: update to run on Flutter 3.7.
+ - **FEAT**: improve PermissionStatus.
+ - **FEAT**(android): background mode for android.
+ - **FEAT**: unify into one pigeon file.
+ - **FEAT**: remove useless tests thanks to Pigeon.
+ - **FEAT**(ios): using SwiftLocation.
+ - **FEAT**(ios): initialize the ios package.
+ - **FEAT**(android): readying docs.
+ - **FEAT**(android): dialog with AppCompat.
+ - **FEAT**(android): support for coarse location.
+ - **FEAT**(android): get permission status.
+ - **FEAT**(android): set settings for individual location settings.
+ - **FEAT**(android): change settings of onLocationChanged.
+ - **FEAT**(android): change settings.
+ - **FEAT**(android): implement setLocationSettings.
+ - **FEAT**(android): implement onLocationChanged.
+ - **FEAT**: first version 5 commit.
+ - **DOCS**: writing docs for version 5.
+ - **DOCS**: writing docs for version 5.
+ - **DOCS**: update documentation.
+ - **DOCS**: add documentation to code.
+
 ## 5.0.0-dev.4
 
  - **FEAT**: update to run on Flutter 3.7.

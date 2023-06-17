@@ -1,3 +1,21 @@
+## 5.0.0-dev.5
+
+ - **FEAT**: improve PermissionStatus.
+ - **FEAT**(ios): background mode for ios.
+ - **FEAT**(android): background mode for android.
+ - **FEAT**(macos): ready version macos.
+ - **FEAT**: unify into one pigeon file.
+ - **FEAT**: remove useless tests thanks to Pigeon.
+ - **FEAT**(ios): settings mapping.
+ - **FEAT**(ios): using SwiftLocation.
+ - **FEAT**(ios): ready with CLocationManager.
+ - **FEAT**(ios): initialize the ios package.
+ - **FEAT**: first version 5 commit.
+ - **DOCS**: writing docs for version 5.
+ - **DOCS**: writing docs for version 5.
+ - **DOCS**: update documentation.
+ - **DOCS**: add documentation to code.
+
 ## 5.0.0-dev.4
 
  - **FEAT**: improve PermissionStatus.
