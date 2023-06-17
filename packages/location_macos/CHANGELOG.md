@@ -1,4 +1,8 @@
-## 5.0.0-dev.4
+## 6.0.1
+
+ - Update a dependency to the latest release.
+
+## 6.0.0
 
  - **FEAT**: improve PermissionStatus.
  - **FEAT**(macos): ready version macos.

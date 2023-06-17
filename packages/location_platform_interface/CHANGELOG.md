@@ -1,4 +1,8 @@
-## 5.0.0-dev.4
+## 6.0.1
+
+ - reinit und upgrade
+
+## 6.0.0
 
  - **FIX**(tests): add platform tests.
  - **FIX**(tests): fix tests.

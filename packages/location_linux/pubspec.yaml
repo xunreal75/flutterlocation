@@ -2,7 +2,7 @@ name: location_linux
 description: Linux implementation of the location plugin
 homepage: https://docs.page/Lyokone/flutterlocation
 repository: https://github.com/Lyokone/flutterlocation
-version: 5.0.0-dev.0
+version: 6.0.0
 publish_to: none
 
 environment:
@@ -20,7 +20,7 @@ flutter:
 dependencies:
   flutter:
     sdk: flutter
-  location_platform_interface: ^5.0.0-dev.4
+  location_platform_interface: ^6.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

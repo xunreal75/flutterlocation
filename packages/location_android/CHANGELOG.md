@@ -1,4 +1,8 @@
-## 5.0.0-dev.5
+## 6.0.1
+
+ - Update a dependency to the latest release.
+
+## 6.0.0
 
  - **FEAT**: update to run on Flutter 3.7.
  - **FEAT**: improve PermissionStatus.
@@ -22,7 +26,7 @@
  - **DOCS**: update documentation.
  - **DOCS**: add documentation to code.
 
-## 5.0.0-dev.4
+## 6.0.0
 
  - **FEAT**: update to run on Flutter 3.7.
 

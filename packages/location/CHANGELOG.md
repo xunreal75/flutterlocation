@@ -1,3 +1,7 @@
+## 6.0.1
+
+ - Update a dependency to the latest release.
+
 ## 6.0.0
 
  - forked from v5 from lyokone
@@ -81,11 +85,11 @@
 
  - **FEAT**: add the ability to use a mock instance.
 
-## 5.0.0-dev.5
+## 6.0.0
 
  - **DOCS**: update docs.
 
-## 5.0.0-dev.4
+## 6.0.0
 
  - **DOCS**: update readme.
  - **DOCS**: update readme.

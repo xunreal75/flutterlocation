@@ -11,19 +11,55 @@ See [Conventional Commits](https://conventionalcommits.org) for commit guideline
 
 Packages with breaking changes:
 
- - [`location_web` - `v5.0.0-dev.4`](#location_web---v500-dev4)
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`location_platform_interface` - `v6.0.1`](#location_platform_interface---v601)
+ - [`location_macos` - `v6.0.1`](#location_macos---v601)
+ - [`location_web` - `v6.0.1`](#location_web---v601)
+ - [`location_ios` - `v6.0.1`](#location_ios---v601)
+ - [`location_android` - `v6.0.1`](#location_android---v601)
+ - [`location` - `v6.0.1`](#location---v601)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `location_macos` - `v6.0.1`
+ - `location_web` - `v6.0.1`
+ - `location_ios` - `v6.0.1`
+ - `location_android` - `v6.0.1`
+ - `location` - `v6.0.1`
+
+---
+
+#### `location_platform_interface` - `v6.0.1`
+
+ - reinit und upgrade
+
+
+## 2023-06-17
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - [`location_web` - `v6.0.0`](#location_web---v500-dev4)
 
 Packages with other changes:
 
  - [`location` - `v6.0.0`](#location---v600)
- - [`location_android` - `v5.0.0-dev.5`](#location_android---v500-dev5)
- - [`location_ios` - `v5.0.0-dev.5`](#location_ios---v500-dev5)
- - [`location_macos` - `v5.0.0-dev.4`](#location_macos---v500-dev4)
- - [`location_platform_interface` - `v5.0.0-dev.4`](#location_platform_interface---v500-dev4)
+ - [`location_android` - `v6.0.0`](#location_android---v500-dev5)
+ - [`location_ios` - `v6.0.0`](#location_ios---v500-dev5)
+ - [`location_macos` - `v6.0.0`](#location_macos---v500-dev4)
+ - [`location_platform_interface` - `v6.0.0`](#location_platform_interface---v500-dev4)
 
 ---
 
-#### `location_web` - `v5.0.0-dev.4`
+#### `location_web` - `v6.0.0`
 
  - **FIX**: remove unused android and ios project in location_web.
  - **FEAT**: improve PermissionStatus.
@@ -111,7 +147,7 @@ Packages with other changes:
  - **DOCS**: update readme web.
  - **DOCS**: add documentation to code.
 
-#### `location_android` - `v5.0.0-dev.5`
+#### `location_android` - `v6.0.0`
 
  - **FEAT**: update to run on Flutter 3.7.
  - **FEAT**: improve PermissionStatus.
@@ -135,7 +171,7 @@ Packages with other changes:
  - **DOCS**: update documentation.
  - **DOCS**: add documentation to code.
 
-#### `location_ios` - `v5.0.0-dev.5`
+#### `location_ios` - `v6.0.0`
 
  - **FEAT**: improve PermissionStatus.
  - **FEAT**(ios): background mode for ios.
@@ -153,7 +189,7 @@ Packages with other changes:
  - **DOCS**: update documentation.
  - **DOCS**: add documentation to code.
 
-#### `location_macos` - `v5.0.0-dev.4`
+#### `location_macos` - `v6.0.0`
 
  - **FEAT**: improve PermissionStatus.
  - **FEAT**(macos): ready version macos.
@@ -164,7 +200,7 @@ Packages with other changes:
  - **DOCS**: update documentation.
  - **DOCS**: add documentation to code.
 
-#### `location_platform_interface` - `v5.0.0-dev.4`
+#### `location_platform_interface` - `v6.0.0`
 
  - **FIX**(tests): add platform tests.
  - **FIX**(tests): fix tests.
@@ -213,7 +249,7 @@ Packages with breaking changes:
 Packages with other changes:
 
  - [`location` - `v5.0.0-dev.9`](#location---v500-dev9)
- - [`location_android` - `v5.0.0-dev.4`](#location_android---v500-dev4)
+ - [`location_android` - `v6.0.0`](#location_android---v500-dev4)
 
 ---
 
@@ -221,7 +257,7 @@ Packages with other changes:
 
  - **FEAT**: update to run on Flutter 3.7.
 
-#### `location_android` - `v5.0.0-dev.4`
+#### `location_android` - `v6.0.0`
 
  - **FEAT**: update to run on Flutter 3.7.
 
