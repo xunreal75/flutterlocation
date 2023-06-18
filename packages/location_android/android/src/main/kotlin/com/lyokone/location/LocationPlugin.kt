@@ -149,8 +149,6 @@ class LocationPlugin : FlutterPlugin, ActivityAware, LocationListener,
                 .setAltitude(location.altitude)
                 .setBearing(location.bearing.toDouble())
                 .setElaspedRealTimeNanos(location.elapsedRealtimeNanos.toDouble())
-                .setIsMock(location.isFromMockProvider)
-                .setSatellites(location.extras.getInt("satellites").toLong())
                 .setSpeed(location.speed.toDouble())
 
 
