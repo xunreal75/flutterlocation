@@ -1,5 +1,9 @@
 ## 6.0.1
 
+ - error on creation
+
+## 6.0.1
+
  - Update a dependency to the latest release.
 
 ## 6.0.0

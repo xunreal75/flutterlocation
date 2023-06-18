@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-06-18
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`location_web` - `v6.0.1`](#location_web---v601)
+ - [`location` - `v6.0.2`](#location---v602)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `location` - `v6.0.2`
+
+---
+
+#### `location_web` - `v6.0.1`
+
+ - error on creation
+
+
 ## 2023-06-17
 
 ### Changes
