@@ -2,7 +2,6 @@ name: location
 
 packages:
   - packages/**
-  - example/**
 
 scripts:
   generate:pigeon:

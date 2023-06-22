@@ -3,9 +3,8 @@ package com.lyokone.location.location.configuration;
 import android.Manifest;
 
 import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.Priority;
 
-public final class  Defaults {
+public final class Defaults {
 
     private static final int SECOND = 1000;
     private static final int MINUTE = 60 * SECOND;
@@ -29,24 +28,17 @@ public final class  Defaults {
     public static final String[] LOCATION_PERMISSIONS = new String[] { Manifest.permission.ACCESS_COARSE_LOCATION,
           Manifest.permission.ACCESS_FINE_LOCATION };
 
-    private static final int LOCATION_PRIORITY = Priority.PRIORITY_BALANCED_POWER_ACCURACY;
+    private static final int LOCATION_PRIORITY = LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY;
     private static final int LOCATION_FASTEST_INTERVAL = MINUTE;
 
     /**
      * https://developers.google.com/android/reference/com/google/android/gms/location/LocationRequest
      */
     public static LocationRequest createDefaultLocationRequest() {
-      //  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            return new LocationRequest.Builder(Defaults.LOCATION_PRIORITY).build();
-            // }
-        //  }
-        /*else{
         return LocationRequest.create()
               .setPriority(Defaults.LOCATION_PRIORITY)
               .setInterval(Defaults.LOCATION_INTERVAL)
               .setFastestInterval(Defaults.LOCATION_FASTEST_INTERVAL);
-        }*/
     }
 
     private Defaults() {
