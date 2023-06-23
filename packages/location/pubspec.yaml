@@ -27,7 +27,11 @@ flutter:
 dependencies:
   flutter:
     sdk: flutter
-  location_android: ^6.0.1
+  location_android:
+    git:
+      url: https://github.com/xunreal75/flutterlocation.git
+      ref: V6
+      path: packages/location_android
   location_ios: ^6.0.1
   # location_linux:
   #   path: ../location_linux
