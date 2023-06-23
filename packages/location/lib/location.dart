@@ -19,6 +19,7 @@ void setLocationInstance(LocationPlatform platform) {
 }
 
 /// Returns the current location.
+/// throws an Exception on Error
 Future<LocationData> getLocation({LocationSettings? settings}) async {
   final location = await _platform.getLocation(settings: settings);
   if (location == null) throw Exception('Unable to get location');

@@ -64,13 +64,41 @@ class StreamHandler: NSObject, FlutterStreamHandler {
             switch result {
             case .success(let newData):
                 print("New location: \(newData)")
-                self.events!(SwiftLocationPlugin.locationToData(newData).toMap())
+                let newLoc = SwiftLocationPlugin.locationToData(newData)
+                //Workaround for missing to List Method implementation from Pigeon
+                let newLocList  =
+                [
+                    newLoc.latitude ?? NSNull(),
+                    newLoc.longitude ?? NSNull(),
+                    newLoc.accuracy ?? NSNull(),
+                    newLoc.altitude ?? NSNull(),
+                    newLoc.bearing ?? NSNull(),
+                    newLoc.bearingAccuracyDegrees ?? NSNull(),
+                    newLoc.elaspedRealTimeNanos ?? NSNull(),
+                    newLoc.elaspedRealTimeUncertaintyNanos ?? NSNull(),
+                    newLoc.satellites ?? NSNull(),
+                    newLoc.speed ?? NSNull(),
+                    newLoc.speedAccuracy ?? NSNull(),
+                    newLoc.time ?? NSNull(),
+                    newLoc.verticalAccuracy ?? NSNull() ,
+                    newLoc.isMock ?? NSNull()
+                ]
+                if self.events != nil{
+                    self.events!(newLocList)
+                }
+                else{
+                //onCancel sets event to nil - Called if new loc in min interval
+                //avoid exception and app crash on nil events (FlutterSink?)
+                }
                 
             case .failure(let error):
                 print("An error has occurred: \(error.localizedDescription)")
-                self.events!(FlutterError(code: "LOCATION_ERROR",
+                if self.events != nil{
+                    self.events!(FlutterError(code: "LOCATION_ERROR",
                                     message: error.localizedDescription,
                                     details: error.recoverySuggestion))
+                }
+
             }
         }
 
