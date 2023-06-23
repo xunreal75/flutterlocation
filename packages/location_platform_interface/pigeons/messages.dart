@@ -16,7 +16,6 @@ import 'package:pigeon/pigeon.dart';
     objcSourceOut: '../location_ios/ios/Classes/messages.g.m',
   ),
 )
-
 class PigeonLocationData {
   double? latitude;
   double? longitude;

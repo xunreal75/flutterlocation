@@ -124,15 +124,19 @@ class LocationPlugin : FlutterPlugin, ActivityAware, LocationListener,
             ProcessType.ASKING_PERMISSIONS -> {
                 Log.d("Location", "ASKING_PERMISSIONS")
             }
+
             ProcessType.GETTING_LOCATION_FROM_CUSTOM_PROVIDER -> {
                 Log.d("Location", "GETTING_LOCATION_FROM_CUSTOM_PROVIDER")
             }
+
             ProcessType.GETTING_LOCATION_FROM_GOOGLE_PLAY_SERVICES -> {
                 Log.d("Location", "GETTING_LOCATION_FROM_GOOGLE_PLAY_SERVICES")
             }
+
             ProcessType.GETTING_LOCATION_FROM_GPS_PROVIDER -> {
                 Log.d("Location", "GETTING_LOCATION_FROM_GPS_PROVIDER")
             }
+
             ProcessType.GETTING_LOCATION_FROM_NETWORK_PROVIDER -> {
                 Log.d("Location", "GETTING_LOCATION_FROM_NETWORK_PROVIDER")
             }
@@ -150,7 +154,7 @@ class LocationPlugin : FlutterPlugin, ActivityAware, LocationListener,
                 .setBearing(location.bearing.toDouble())
                 .setElaspedRealTimeNanos(location.elapsedRealtimeNanos.toDouble())
                 .setIsMock(location.isFromMockProvider)
-                .setSatellites(location.extras.getInt("satellites").toLong())
+                //.setSatellites(location.extras.getInt("satellites").toLong())
                 .setSpeed(location.speed.toDouble())
 
 
@@ -176,7 +180,7 @@ class LocationPlugin : FlutterPlugin, ActivityAware, LocationListener,
             )
         }
 
-        eventSink?.success(pigeonLocationData.toMap())
+        eventSink?.success(pigeonLocationData.toList())
 
         resultsNeedingLocation = mutableListOf()
     }
@@ -188,20 +192,28 @@ class LocationPlugin : FlutterPlugin, ActivityAware, LocationListener,
                 resultPermissionRequest?.success(2)
                 resultPermissionRequest = null
             }
+
             FailType.GOOGLE_PLAY_SERVICES_NOT_AVAILABLE -> {
             }
+
             FailType.GOOGLE_PLAY_SERVICES_SETTINGS_DENIED -> {
             }
+
             FailType.GOOGLE_PLAY_SERVICES_SETTINGS_DIALOG -> {
             }
+
             FailType.NETWORK_NOT_AVAILABLE -> {
             }
+
             FailType.TIMEOUT -> {
             }
+
             FailType.UNKNOWN -> {
             }
+
             FailType.VIEW_DETACHED -> {
             }
+
             FailType.VIEW_NOT_REQUIRED_TYPE -> {
             }
         }
@@ -265,8 +277,9 @@ class LocationPlugin : FlutterPlugin, ActivityAware, LocationListener,
 
     override fun getLocation(
         settings: GeneratedAndroidLocation.PigeonLocationSettings?,
-        result: GeneratedAndroidLocation.Result<GeneratedAndroidLocation.PigeonLocationData>?
+        result: GeneratedAndroidLocation.Result<GeneratedAndroidLocation.PigeonLocationData>
     ) {
+
         resultsNeedingLocation.add(result)
 
         val isListening = streamLocationManager != null
@@ -297,11 +310,11 @@ class LocationPlugin : FlutterPlugin, ActivityAware, LocationListener,
 
     private fun getPriorityFromAccuracy(accuracy: GeneratedAndroidLocation.PigeonLocationAccuracy): Int {
         return when (accuracy) {
-            GeneratedAndroidLocation.PigeonLocationAccuracy.powerSave -> LocationRequest.PRIORITY_NO_POWER
-            GeneratedAndroidLocation.PigeonLocationAccuracy.low -> LocationRequest.PRIORITY_LOW_POWER
-            GeneratedAndroidLocation.PigeonLocationAccuracy.balanced -> LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
-            GeneratedAndroidLocation.PigeonLocationAccuracy.high -> LocationRequest.PRIORITY_HIGH_ACCURACY
-            GeneratedAndroidLocation.PigeonLocationAccuracy.navigation -> LocationRequest.PRIORITY_HIGH_ACCURACY
+            GeneratedAndroidLocation.PigeonLocationAccuracy.POWER_SAVE -> LocationRequest.PRIORITY_NO_POWER
+            GeneratedAndroidLocation.PigeonLocationAccuracy.LOW -> LocationRequest.PRIORITY_LOW_POWER
+            GeneratedAndroidLocation.PigeonLocationAccuracy.BALANCED -> LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
+            GeneratedAndroidLocation.PigeonLocationAccuracy.HIGH -> LocationRequest.PRIORITY_HIGH_ACCURACY
+            GeneratedAndroidLocation.PigeonLocationAccuracy.NAVIGATION -> LocationRequest.PRIORITY_HIGH_ACCURACY
         }
     }
 
@@ -366,6 +379,7 @@ class LocationPlugin : FlutterPlugin, ActivityAware, LocationListener,
 
         return locationConfiguration
     }
+
 
     override fun setLocationSettings(settings: GeneratedAndroidLocation.PigeonLocationSettings): Boolean {
         val locationConfiguration = getLocationConfigurationFromSettings(settings)
@@ -465,7 +479,7 @@ class LocationPlugin : FlutterPlugin, ActivityAware, LocationListener,
         return 0;
     }
 
-    override fun requestPermission(result: GeneratedAndroidLocation.Result<Long>?) {
+    override fun requestPermission(result: GeneratedAndroidLocation.Result<Long>) {
         val permissionProvider = DefaultPermissionProvider(LOCATION_PERMISSIONS, null)
         val contextProcessor = ContextProcessor(activity?.application)
         contextProcessor.activity = activity
