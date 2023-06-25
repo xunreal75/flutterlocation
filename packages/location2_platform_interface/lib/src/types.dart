@@ -1,6 +1,6 @@
 // ignore_for_file: lines_longer_than_80_chars
 
-part of location2_platform_interface;
+part of '../location2_platform_interface.dart';
 
 // Those types are often a direct reflect of the Pigeon implementation
 // but since Pigeon does not support comments

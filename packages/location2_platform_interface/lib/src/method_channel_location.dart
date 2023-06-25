@@ -1,4 +1,4 @@
-part of location2_platform_interface;
+part of '../location2_platform_interface.dart';
 
 ///
 class MethodChannelLocation extends LocationPlatform {

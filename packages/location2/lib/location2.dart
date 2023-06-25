@@ -3,12 +3,12 @@ import 'package:location2_platform_interface/location2_platform_interface.dart';
 
 export 'package:location2_platform_interface/location2_platform_interface.dart'
     show
-        LocationData,
         LocationAccuracy,
+        LocationData,
+        LocationPlatform,
         LocationSettings,
         PermissionStatus,
-        XPermissionStatus,
-        LocationPlatform;
+        XPermissionStatus;
 
 LocationPlatform get _platform => LocationPlatform.instance;
 
@@ -37,11 +37,13 @@ Stream<LocationData> onLocationChanged({bool inBackground = false}) {
 /// Update global location settings.
 /// The settings are a passthrought to the [LocationSettings] class.
 Future<void> setLocationSettings({
-  /// If set to true, the user will be prompted to grant permission to use location
+  /// If set to true, the user will be prompted to grant
+  /// permission to use location
   /// if not already granted.
   bool askForPermission = true,
 
-  /// The message to display to the user when asking for permission to use location.
+  /// The message to display to the user when asking for permission to use
+  /// location.
   /// Only valid on Android.
   /// For iOS, you have to change the permission in the Info.plist file.
   String rationaleMessageForPermissionRequest =
@@ -57,7 +59,8 @@ Future<void> setLocationSettings({
   /// Only valid on Android.
   bool useGooglePlayServices = true,
 
-  /// If set to true, the app will request Google Play Services to request location.
+  /// If set to true, the app will request Google Play Services to request
+  /// location.
   /// If not available on the device, the app will fallback to GPS.
   bool askForGooglePlayServices = false,
 
@@ -65,7 +68,8 @@ Future<void> setLocationSettings({
   /// Only valid on Android.
   bool askForGPS = true,
 
-  /// If set to true, the app will fallback to GPS if Google Play Services is not
+  /// If set to true, the app will fallback to GPS if Google Play Services
+  /// is not
   /// available on the device.
   /// Only valid on Android.
   bool fallbackToGPS = true,
@@ -178,7 +182,7 @@ Future<bool> isNetworkEnabled() async {
 /// Change options of sticky background notification on Android.
 ///
 /// This method only applies to Android and allows for customizing the
-/// notification, which is shown when [inBackground] is set to true.
+/// notification, which is shown when ['inBackground'] is set to true.
 ///
 /// Uses [title] as the notification's content title and searches for a
 /// drawable resource with the given [iconName]. If no matching resource is
@@ -195,7 +199,8 @@ Future<bool> isNetworkEnabled() async {
 /// Returns true if the notification is currently has been properly updated
 ///
 /// For Android SDK versions above 25, uses [channelName] for the
-/// [NotificationChannel](https://developer.android.com/reference/android/app/NotificationChannel).
+/// ['NotificationChannel']
+/// (https://developer.android.com/reference/android/app/NotificationChannel).
 Future<bool> updateBackgroundNotification({
   String? channelName,
   String? title,

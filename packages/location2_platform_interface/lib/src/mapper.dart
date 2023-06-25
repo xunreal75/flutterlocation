@@ -1,4 +1,4 @@
-part of location2_platform_interface;
+part of '../location2_platform_interface.dart';
 
 /// Allow to map the return of the permission request
 /// Will be deleted once Pigeon supports returning Enum

@@ -1,7 +1,6 @@
 library location2_platform_interface;
 
 import 'dart:io' show Platform;
-import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
