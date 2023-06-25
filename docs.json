@@ -35,20 +35,20 @@
       [
         [
           "LocationData",
-          "https://pub.dev/documentation/location_platform_interface/latest/location_platform_interface/LocationData-class.html"
+          "https://pub.dev/documentation/location2_platform_interface/latest/location2_platform_interface/LocationData-class.html"
         ],
         [
           "LocationAccuracy",
-          "https://pub.dev/documentation/location_platform_interface/latest/location_platform_interface/LocationAccuracy-class.html"
+          "https://pub.dev/documentation/location2_platform_interface/latest/location2_platform_interface/LocationAccuracy-class.html"
         ],
 
         [
           "LocationSettings",
-          "https://pub.dev/documentation/location_platform_interface/latest/location_platform_interface/LocationSettings-class.html"
+          "https://pub.dev/documentation/location2_platform_interface/latest/location2_platform_interface/LocationSettings-class.html"
         ],
         [
           "PermissionStatus",
-          "https://pub.dev/documentation/location_platform_interface/latest/location_platform_interface/PermissionStatus-class.html"
+          "https://pub.dev/documentation/location2_platform_interface/latest/location2_platform_interface/PermissionStatus-class.html"
         ]
       ]
     ],
@@ -57,7 +57,7 @@
       [
         [
           "Demo App",
-          "https://github.com/Lyokone/flutterlocation/tree/master/packages/location/example"
+          "https://github.com/Xunreal75/flutterlocation/packages/location/example"
         ]
       ]
     ]

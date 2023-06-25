@@ -19,3 +19,6 @@ scripts:
 
   pubget:
     run: melos exec -- "flutter pub get"
+
+  analyze:
+    run: melos exec -- "flutter analyze"

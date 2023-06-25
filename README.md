@@ -6,12 +6,10 @@
 <p align="center">
   <a href="https://github.com/invertase/melos#readme-badge"><img src="https://img.shields.io/badge/maintained%20with-melos-f700ff.svg?style=flat-square" alt="Melos" /></a>
   <a href="https://docs.page"><img src="https://img.shields.io/badge/powered%20by-docs.page-34C4AC.svg?style=flat-square" alt="docs.page" /></a>
-  <a href="https://pub.dartlang.org/packages/location"><img src="https://img.shields.io/pub/v/location.svg?style=flat-square" alt="docs.page" /></a>
-</p>
 
 <p align="center">
-  <a href="https://docs.page/Lyokone/flutterlocation">Documentation</a> &bull; 
-  <a href="https://github.com/Lyokone/flutterlocation">GitHub</a> &bull; 
+  <a href="https://docs.page/Xunreal75/flutterlocation">Documentation</a> • 
+  <a href="https://github.com/Xunreal75/flutterlocation">GitHub</a> • 
   <a href="https://location.bernos.dev">Web Demo</a>
 </p>
 
@@ -39,7 +37,7 @@ It currently supports Android, iOS, macOS and Web. Support for remaining platfor
 
 ## How to use?
 
-Go to the [documentation to install Location](https://docs.page/Lyokone/flutterlocation/getting-started)!
+Go to the [documentation to install Location](https://docs.page/Xunreal75/flutterlocation/getting-started)!
 
 Then, to get the location of your user you can simply do:
 
