@@ -283,13 +283,13 @@ class _LocationHostApiCodec extends StandardMessageCodec {
   @override
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
-      case 128:
+      case 128: 
         return PigeonLocationData.decode(readValue(buffer)!);
-      case 129:
+      case 129: 
         return PigeonLocationSettings.decode(readValue(buffer)!);
-      case 130:
+      case 130: 
         return PigeonLocationSettings.decode(readValue(buffer)!);
-      case 131:
+      case 131: 
         return PigeonNotificationSettings.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -307,8 +307,7 @@ class LocationHostApi {
 
   static const MessageCodec<Object?> codec = _LocationHostApiCodec();
 
-  Future<PigeonLocationData> getLocation(
-      PigeonLocationSettings? arg_settings) async {
+  Future<PigeonLocationData> getLocation(PigeonLocationSettings? arg_settings) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.LocationHostApi.getLocation', codec,
         binaryMessenger: _binaryMessenger);
@@ -366,7 +365,8 @@ class LocationHostApi {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.LocationHostApi.getPermissionStatus', codec,
         binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    final List<Object?>? replyList =
+        await channel.send(null) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -392,7 +392,8 @@ class LocationHostApi {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.LocationHostApi.requestPermission', codec,
         binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    final List<Object?>? replyList =
+        await channel.send(null) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -418,7 +419,8 @@ class LocationHostApi {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.LocationHostApi.isGPSEnabled', codec,
         binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    final List<Object?>? replyList =
+        await channel.send(null) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -444,7 +446,8 @@ class LocationHostApi {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.LocationHostApi.isNetworkEnabled', codec,
         binaryMessenger: _binaryMessenger);
-    final List<Object?>? replyList = await channel.send(null) as List<Object?>?;
+    final List<Object?>? replyList =
+        await channel.send(null) as List<Object?>?;
     if (replyList == null) {
       throw PlatformException(
         code: 'channel-error',
@@ -466,8 +469,7 @@ class LocationHostApi {
     }
   }
 
-  Future<bool> changeNotificationSettings(
-      PigeonNotificationSettings arg_settings) async {
+  Future<bool> changeNotificationSettings(PigeonNotificationSettings arg_settings) async {
     final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
         'dev.flutter.pigeon.LocationHostApi.changeNotificationSettings', codec,
         binaryMessenger: _binaryMessenger);

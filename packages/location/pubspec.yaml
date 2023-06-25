@@ -1,11 +1,12 @@
 name: location
-description: This librarie aims at providing you a simple way to get the user location without thinking about permission.
+description: This library aims at providing you a simple way to get the user location without thinking about permission.
 homepage: https://docs.page/Lyokone/flutterlocation
 repository: https://github.com/Lyokone/flutterlocation
+issue_tracker: https://github.com/Lyokone/flutterlocation/issues?q=is%3Aissue+is%3Aopen
 version: 6.0.1
 
 environment:
-  sdk: ">=2.17.0 <3.0.0"
+  sdk: ">=2.17.0 <4.0.0"
   flutter: ">=3.0.0"
 
 flutter:
@@ -27,16 +28,12 @@ flutter:
 dependencies:
   flutter:
     sdk: flutter
-  location_android:
-    git:
-      url: https://github.com/xunreal75/flutterlocation.git
-      ref: V6
-      path: packages/location_android
-  location_ios: ^6.0.1
+  location_platform_interface: ^6.0.1
+  location_android: ^6.0.1
   # location_linux:
   #   path: ../location_linux
   location_macos: ^6.0.1
-  location_platform_interface: ^6.0.1
+  location_ios: ^6.0.1
   location_web: ^6.0.1
   # location_windows:
   #   path: ../location_windows
@@ -45,5 +42,5 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   mocktail: ^0.3.0
-  plugin_platform_interface: ^2.0.0
+  plugin_platform_interface: ^2.1.4
   very_good_analysis: ^3.0.0

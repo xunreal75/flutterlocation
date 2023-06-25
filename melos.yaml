@@ -7,7 +7,7 @@ scripts:
   generate:pigeon:
     run: melos exec -- "flutter pub run pigeon --input ./pigeons/messages.dart"
     select-package:
-      file-exists: "pigeons/messages.dart"
+      file-exists: "./pigeons/messages.dart"
 
   test:
     run: melos exec -- "flutter test"
@@ -16,3 +16,6 @@ scripts:
 
   format:
     run: melos exec -- dart format -o write .
+
+  pubget:
+    run: melos exec -- "flutter pub get"
