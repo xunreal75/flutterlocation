@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Lyokone/flutterlocation/master/assets/Logo.png" alt="Flutter Location" /> <br /><br />
+  <img src="https://raw.githubusercontent.com/Xunreal75/flutterlocation/assets/Logo.png" alt="Flutter Location" /> <br /><br />
   <span>A simple way to get the user location without thinking about permission.</span>
 </p>
 
@@ -10,8 +10,8 @@
 </p>
 
 <p align="center">
-  <a href="https://docs.page/Lyokone/flutterlocation">Documentation</a> &bull; 
-  <a href="https://github.com/Lyokone/flutterlocation">GitHub</a> &bull; 
+  <a href="https://docs.page/Xunreal75/flutterlocation">Documentation</a> &bull; 
+  <a href="https://github.com/Xunreal75/flutterlocation">GitHub</a> &bull; 
   <a href="https://location.bernos.dev">Web Demo</a>
 </p>
 
@@ -39,7 +39,7 @@ It currently supports Android, iOS, macOS and Web. Support for remaining platfor
 
 ## How to use?
 
-Go to the [documentation to install Location](https://docs.page/Lyokone/flutterlocation/getting-started)!
+Go to the [documentation to install Location](https://docs.page/Xunreal75/flutterlocation/getting-started)!
 
 Then, to get the location of your user you can simply do:
 

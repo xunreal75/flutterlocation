@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -61,7 +61,7 @@
           .then((reg) => {
             function waitForActivation(serviceWorker) {
               serviceWorker.addEventListener('statechange', () => {
-                if (serviceWorker.state == 'activated') {
+                if (serviceWorker.state === 'activated') {
                   console.log('Installed new service worker.');
                   loadMainDartJs();
                 }
