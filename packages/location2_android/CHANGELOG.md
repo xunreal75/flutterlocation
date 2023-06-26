@@ -1,3 +1,7 @@
+## 6.0.2
+
+ - added timestamp on Android
+
 ## 6.0.1
 
  - Update a dependency to the latest release.
