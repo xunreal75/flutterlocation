@@ -168,6 +168,7 @@ class LocationPlugin : FlutterPlugin, ActivityAware, LocationListener,
             locationBuilder.setElaspedRealTimeUncertaintyNanos(location.elapsedRealtimeUncertaintyNanos)
         }
 
+        locationBuilder.setTime(System.currentTimeMillis().toDouble())
 
         val pigeonLocationData = locationBuilder.build()
 
