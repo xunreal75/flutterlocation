@@ -1,0 +1,24 @@
+name: location
+
+packages:
+  - packages/**
+
+scripts:
+  generate:pigeon:
+    run: melos exec -- "flutter pub run pigeon --input ./pigeons/messages.dart"
+    select-package:
+      file-exists: "./pigeons/messages.dart"
+
+  test:
+    run: melos exec -- "flutter test"
+    select-package:
+      dir-exists: "test"
+
+  format:
+    run: melos exec -- dart format -o write .
+
+  pubget:
+    run: melos exec -- "flutter pub get"
+
+  analyze:
+    run: melos exec -- "flutter analyze"

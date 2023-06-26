@@ -1,0 +1,4 @@
+package android
+
+rootProject.name = 'location2_android'
+include ':location'

@@ -1,0 +1,28 @@
+name: location2_web
+description: Web implementation of the location plugin
+homepage: https://docs.page/Xunreal75/flutterlocation
+repository: https://github.com/Xunreal75/flutterlocation
+version: 6.0.1
+
+environment:
+  sdk: ">=2.17.0 <4.0.0"
+  flutter: ">=3.0.0"
+
+flutter:
+  plugin:
+    implements: location
+    platforms:
+      web:
+        pluginClass: LocationWeb
+        fileName: location2_web.dart
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+  location2_platform_interface: ^6.0.1
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  very_good_analysis: ^5.0.0+1
