@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-06-27
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`location2` - `v6.0.2`](#location2---v602)
+
+---
+
+#### `location2` - `v6.0.2`
+
+ - Readme fixed
+
+
 ## 2023-06-26
 
 ### Changes
