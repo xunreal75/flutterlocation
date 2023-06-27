@@ -1,30 +1,24 @@
-<p align="center">
+<p style="text-align: center">
   <img src="https://raw.githubusercontent.com/Xunreal75/flutterlocation/assets/Logo.png" alt="Flutter Location" /> <br /><br />
   <span>A simple way to get the user location without thinking about permission.</span>
 </p>
 
-<p align="center">
+<p style="text-align: center">
   <a href="https://github.com/invertase/melos#readme-badge"><img src="https://img.shields.io/badge/maintained%20with-melos-f700ff.svg?style=flat-square" alt="Melos" /></a>
   <a href="https://docs.page"><img src="https://img.shields.io/badge/powered%20by-docs.page-34C4AC.svg?style=flat-square" alt="docs.page" /></a>
-  <a href="https://pub.dartlang.org/packages/location"><img src="https://img.shields.io/pub/v/location.svg?style=flat-square" alt="docs.page" /></a>
 </p>
 
-<p align="center">
+<p style="text-align: center">
   <a href="https://docs.page/Xunreal75/flutterlocation">Documentation</a> &bull; 
   <a href="https://github.com/Xunreal75/flutterlocation">GitHub</a> &bull; 
-  <a href="https://location.bernos.dev">Web Demo</a>
+  <a href="https://huth.app/location">Web Demo</a>
 </p>
 
 ### About
 
-This librarie aims at providing you a simple way to get the user location without thinking about permission.
-It's also heavily configurable so you can easily get **better performance** or **better battery**.
-
-<p align="center">
-  <a href="https://www.youtube.com/watch?feature=player_embedded&v=65qbtJMltVk" target="_blank">
-    <img src="https://img.youtube.com/vi/65qbtJMltVk/0.jpg" alt="Youtube Video" width=480" height="360" border="10" />
-  </a>
-</p>
+This library was update from Lyokones's location. 
+It aims at providing you a simple way to get the user location without thinking about permission.
+It's also configurable so you can easily get **better performance** or **better battery**.
 
 It currently supports Android, iOS, macOS and Web. Support for remaining platforms is incoming.
 
@@ -43,7 +37,17 @@ Go to the [documentation to install Location](https://docs.page/Xunreal75/flutte
 
 Then, to get the location of your user you can simply do:
 
-```dart
-final location = await getLocation();
+
+to pubspec.yaml add below 
+```
+dependencies: 
+ location2: ^6.0.2
+```
+
+in your class
+```
+import 'package:location2/location2.dart';
+
+final location = await getLocation(); //catch exception
 print("Location: ${location.latitude}, ${location.longitude}");
 ```
