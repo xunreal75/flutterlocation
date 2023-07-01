@@ -51,7 +51,7 @@ class PigeonLocationSettings {
     this.rationaleMessageForPermissionRequest =
         'The app needs to access your location',
     this.rationaleMessageForGPSRequest =
-        'The app needs to access your location',
+        'The app needs to access your GPS location',
     this.useGooglePlayServices = true,
     this.askForGooglePlayServices = false,
     this.askForGPS = true,
@@ -108,4 +108,8 @@ abstract class LocationHostApi {
   bool changeNotificationSettings(PigeonNotificationSettings settings);
 
   bool setBackgroundActivated(bool activated);
+
+  bool openLocationSettings();
+
+  bool openAppSettings();
 }

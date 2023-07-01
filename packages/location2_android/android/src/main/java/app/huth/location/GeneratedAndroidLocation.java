@@ -1071,6 +1071,12 @@ public class GeneratedAndroidLocation {
     @NonNull 
     Boolean setBackgroundActivated(@NonNull Boolean activated);
 
+    @NonNull 
+    Boolean openLocationSettings();
+
+    @NonNull 
+    Boolean openAppSettings();
+
     /** The codec used by LocationHostApi. */
     static @NonNull MessageCodec<Object> getCodec() {
       return LocationHostApiCodec.INSTANCE;
@@ -1259,6 +1265,50 @@ public class GeneratedAndroidLocation {
                 Boolean activatedArg = (Boolean) args.get(0);
                 try {
                   Boolean output = api.setBackgroundActivated(activatedArg);
+                  wrapped.add(0, output);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.LocationHostApi.openLocationSettings", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                try {
+                  Boolean output = api.openLocationSettings();
+                  wrapped.add(0, output);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.LocationHostApi.openAppSettings", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                try {
+                  Boolean output = api.openAppSettings();
                   wrapped.add(0, output);
                 }
  catch (Throwable exception) {

@@ -470,4 +470,38 @@ void LocationHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<L
       [channel setMessageHandler:nil];
     }
   }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.LocationHostApi.openLocationSettings"
+        binaryMessenger:binaryMessenger
+        codec:LocationHostApiGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(openLocationSettingsWithError:)], @"LocationHostApi api (%@) doesn't respond to @selector(openLocationSettingsWithError:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        FlutterError *error;
+        NSNumber *output = [api openLocationSettingsWithError:&error];
+        callback(wrapResult(output, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.LocationHostApi.openAppSettings"
+        binaryMessenger:binaryMessenger
+        codec:LocationHostApiGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(openAppSettingsWithError:)], @"LocationHostApi api (%@) doesn't respond to @selector(openAppSettingsWithError:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        FlutterError *error;
+        NSNumber *output = [api openAppSettingsWithError:&error];
+        callback(wrapResult(output, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
 }

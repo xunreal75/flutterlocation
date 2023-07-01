@@ -68,4 +68,22 @@ class LocationWindows extends LocationPlatform {
     // TODO: implement updateBackgroundNotification
     throw UnimplementedError();
   }
+
+  @override
+  Stream<PermissionStatus?> onProviderChanged() {
+    // TODO: implement onProviderChanged
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> openAppSettings() {
+    // TODO: implement openAppSettings
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> openLocationSettings() {
+    // TODO: implement openLocationSettings
+    throw UnimplementedError();
+  }
 }

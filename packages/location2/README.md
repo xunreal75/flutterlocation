@@ -48,6 +48,13 @@ in your class
 ```
 import 'package:location2/location2.dart';
 
+
+setLocationSettings(
+        rationaleMessageForGPSRequest:
+            '....',
+        rationaleMessageForPermissionRequest:
+            '....',
+        askForPermission: true);
 final location = await getLocation(); //catch exception
 print("Location: ${location.latitude}, ${location.longitude}");
 ```

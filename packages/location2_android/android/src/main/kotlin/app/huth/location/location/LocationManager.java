@@ -268,6 +268,7 @@ public class LocationManager implements PermissionListener {
 
     @Override
     public void onPermissionsDenied() {
+
         failed(FailType.PERMISSION_DENIED);
     }
 }

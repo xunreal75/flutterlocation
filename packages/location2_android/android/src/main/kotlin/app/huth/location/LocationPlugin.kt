@@ -9,17 +9,21 @@ import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Location
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
+import android.provider.Settings
 import android.util.Log
 import androidx.annotation.NonNull
-import com.google.android.gms.location.LocationRequest
 import app.huth.location.FlutterLocationService.LocalBinder
 import app.huth.location.location.LocationManager
-import app.huth.location.location.configuration.*
 import app.huth.location.location.configuration.Configurations.defaultConfiguration
+import app.huth.location.location.configuration.DefaultProviderConfiguration
 import app.huth.location.location.configuration.Defaults.LOCATION_PERMISSIONS
+import app.huth.location.location.configuration.GooglePlayServicesConfiguration
+import app.huth.location.location.configuration.LocationConfiguration
+import app.huth.location.location.configuration.PermissionConfiguration
 import app.huth.location.location.constants.FailType
 import app.huth.location.location.constants.ProcessType
 import app.huth.location.location.constants.RequestCode
@@ -28,6 +32,7 @@ import app.huth.location.location.listener.LocationListener
 import app.huth.location.location.providers.locationprovider.DefaultLocationProvider
 import app.huth.location.location.providers.permissionprovider.DefaultPermissionProvider
 import app.huth.location.location.view.ContextProcessor
+import com.google.android.gms.location.LocationRequest
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -226,12 +231,15 @@ class LocationPlugin : FlutterPlugin, ActivityAware, LocationListener,
         resultPermissionRequest = null
     }
 
+
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
         Log.d("Location", "onStatusChanged")
+
     }
 
     override fun onProviderEnabled(provider: String?) {
         Log.d("Location", "onProviderEnabled")
+        ///TODO add listener
     }
 
     override fun onProviderDisabled(provider: String?) {
@@ -532,6 +540,39 @@ class LocationPlugin : FlutterPlugin, ActivityAware, LocationListener,
         )
 
         return true
+    }
+
+    override fun openLocationSettings(): Boolean {
+
+        try {
+            val settingsIntent = Intent();
+            settingsIntent.action= Settings.ACTION_LOCATION_SOURCE_SETTINGS;
+            settingsIntent.addCategory(Intent.CATEGORY_DEFAULT);
+            settingsIntent.data = Uri.parse("package:" + context!!.packageName)
+            settingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            settingsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            settingsIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+            context!!.startActivity(settingsIntent);
+            return true;
+        } catch (ex: Exception) {
+            return false;
+        }
+    }
+
+    override fun openAppSettings(): Boolean {
+        return try {
+            val settingsIntent = Intent()
+            settingsIntent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+            settingsIntent.addCategory(Intent.CATEGORY_DEFAULT)
+            settingsIntent.data = Uri.parse("package:" + context!!.packageName)
+            settingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            settingsIntent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+            settingsIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+            context!!.startActivity(settingsIntent)
+            true
+        } catch (ex: Exception) {
+            false
+        }
     }
 
     override fun setBackgroundActivated(activated: Boolean): Boolean {

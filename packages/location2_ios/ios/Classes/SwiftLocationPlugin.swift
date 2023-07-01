@@ -5,6 +5,22 @@ import CoreLocation
 
 @UIApplicationMain
 public class SwiftLocationPlugin: NSObject, FlutterPlugin, LocationHostApi, UIApplicationDelegate {
+  
+    public func openLocationSettingsWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> NSNumber? {
+        if let url = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(url)
+                return NSNumber(true)
+            }
+        return NSNumber(false)
+    }
+    
+    public func openAppSettingsWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> NSNumber? {
+        if let url = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(url)
+            return NSNumber(true)
+        }
+    return NSNumber(false)
+    }
     
     var globalPigeonLocationSettings: PigeonLocationSettings?
     var streamHandler: StreamHandler?

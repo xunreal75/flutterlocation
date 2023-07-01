@@ -69,4 +69,23 @@ class LocationLinux extends LocationPlatform {
     // TODO: implement onLocationChanged
     throw UnimplementedError();
   }
+
+  @override
+  Stream<PermissionStatus?> onProviderChanged() {
+    // TODO: implement onProviderChanged
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> openAppSettings() {
+    // TODO: implement openAppSettings
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> openLocationSettings() {
+    // TODO: implement openLocationSettings
+    throw UnimplementedError();
+  }
+
 }

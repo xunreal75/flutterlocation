@@ -53,6 +53,9 @@ abstract class LocationPlatform extends PlatformInterface {
   /// Request location permission for the app
   Future<PermissionStatus?> requestPermission();
 
+  /// Return a stream if permissions changed.
+  Stream<PermissionStatus?> onProviderChanged();
+
   /// Return true if GPS is enabled on the device
   Future<bool?> isGPSEnabled();
 
@@ -69,4 +72,16 @@ abstract class LocationPlatform extends PlatformInterface {
     Color? color,
     bool? onTapBringToFront,
   });
+
+  /// Will open the App settings page.
+  /// Returns true if the location settings page could be opened, otherwise
+  /// or false if not.
+  Future<bool> openAppSettings();
+
+  /// Will open the location settings page.
+  /// Returns true if the location settings page could be opened, otherwise
+  /// or false if not.
+  Future<bool> openLocationSettings();
+
+
 }

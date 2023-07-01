@@ -129,6 +129,10 @@ NSObject<FlutterMessageCodec> *LocationHostApiGetCodec(void);
 - (nullable NSNumber *)changeNotificationSettingsSettings:(PigeonNotificationSettings *)settings error:(FlutterError *_Nullable *_Nonnull)error;
 /// @return `nil` only when `error != nil`.
 - (nullable NSNumber *)setBackgroundActivatedActivated:(NSNumber *)activated error:(FlutterError *_Nullable *_Nonnull)error;
+/// @return `nil` only when `error != nil`.
+- (nullable NSNumber *)openLocationSettingsWithError:(FlutterError *_Nullable *_Nonnull)error;
+/// @return `nil` only when `error != nil`.
+- (nullable NSNumber *)openAppSettingsWithError:(FlutterError *_Nullable *_Nonnull)error;
 @end
 
 extern void LocationHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<LocationHostApi> *_Nullable api);

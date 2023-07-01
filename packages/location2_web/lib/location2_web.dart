@@ -107,4 +107,20 @@ class LocationWeb extends LocationPlatform {
   }) async {
     return true;
   }
+
+  @override
+  Stream<PermissionStatus?> onProviderChanged() {
+    // TODO: implement onProviderChanged
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<bool> openAppSettings() {
+    return Future(() => false); //not possible
+  }
+
+  @override
+  Future<bool> openLocationSettings() {
+    return Future(() => false); //not possible
+  }
 }

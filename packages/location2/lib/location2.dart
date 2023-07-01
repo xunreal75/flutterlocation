@@ -161,6 +161,14 @@ Future<PermissionStatus> requestPermission() async {
   return response;
 }
 
+/// Listen to the current location.
+Stream<LocationData> onProviderChanged({bool inBackground = false}) {
+  return _platform
+      .onLocationChanged(inBackground: inBackground)
+      .where((event) => event != null)
+      .cast<LocationData>();
+}
+
 /// Returns true if the GPS provider is enabled
 Future<bool> isGPSEnabled() async {
   final response = await _platform.isGPSEnabled();
@@ -176,6 +184,36 @@ Future<bool> isNetworkEnabled() async {
   if (response == null) {
     throw Exception('Error while getting Network status');
   }
+  return response;
+}
+
+/// Will open the App settings page.
+/// **iOS** opens only common settings page - limited by os
+/// **Web** no settings available
+/// **Android** - opens setting pages
+///
+///```dart
+///  await  openAppSettings();
+///```
+/// Returns true if the location settings page could be opened, otherwise
+/// or false if not.
+Future<bool> openAppSettings() async {
+  final response = await _platform.openAppSettings();
+  return response;
+}
+
+/// Will open the App settings page.
+/// **iOS** opens only common settings page - limited by os
+/// **Web** no settings available
+/// **Android** - opens setting pages
+///
+///```dart
+///  await  openAppSettings();
+///```
+/// Returns true if the location settings page could be opened, otherwise
+/// or false if not.
+Future<bool> openLocationSettings() async {
+  final response = await _platform.openAppSettings();
   return response;
 }
 

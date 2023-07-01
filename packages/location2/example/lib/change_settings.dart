@@ -112,6 +112,20 @@ class _ChangeSettingsState extends State<ChangeSettings> {
               },
               child: const Text('Change'),
             ),
+            const SizedBox(height: 4),
+            ElevatedButton(
+              onPressed: () {
+                openAppSettings();
+              },
+              child: const Text('Open app Settings'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                openLocationSettings();
+                getLocation();
+              },
+              child: const Text('Open location Settings'),
+            ),
           ],
         ),
       ),

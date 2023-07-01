@@ -5,7 +5,9 @@ public interface PermissionListener {
     /**
      * Notify when user is granted all required permissions
      */
-    void onPermissionsGranted();
+    void onPermissionsGranted(
+
+    );
 
     /**
      * Notify when user is denied any one of required permissions

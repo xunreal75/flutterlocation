@@ -61,6 +61,17 @@ class MethodChannelLocation extends LocationPlatform {
     return permissionStatusFromInt(permission);
   }
 
+  /// Current opened stream of provider
+  Stream<PermissionStatus>? _onProviderChanged;
+
+  @override
+  Stream<PermissionStatus?> onProviderChanged() {
+    return _onProviderChanged ??=
+        _eventChannel.receiveBroadcastStream().map<PermissionStatus>(
+              (dynamic event) => event as PermissionStatus);
+  }
+
+
   @override
   Future<bool?> isGPSEnabled() {
     return _api.isGPSEnabled();
@@ -95,5 +106,15 @@ class MethodChannelLocation extends LocationPlatform {
         onTapBringToFront: onTapBringToFront,
       ),
     );
+  }
+
+  @override
+  Future<bool> openAppSettings() {
+    return _api.openAppSettings();
+  }
+
+  @override
+  Future<bool> openLocationSettings() {
+   return _api.openLocationSettings();
   }
 }
