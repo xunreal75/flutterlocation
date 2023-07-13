@@ -36,7 +36,6 @@ Go to the [documentation to install Location](https://docs.page/Xunreal75/flutte
 Then, to get the location of your user you can simply do:
 
 ```dart
-
 final location = await getLocation();
 print("Location: ${location.latitude}, ${location.longitude}");
 ```

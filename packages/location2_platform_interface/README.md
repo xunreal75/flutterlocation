@@ -7,3 +7,9 @@ This interface allows platform-specific implementations of the `location` plugin
 # Usage
 
 To implement a new platform-specific implementation of `location`, extend `LocationPlatform` with an implementation that performs the platform-specific behavior.
+
+* update Pigeon
+
+```bash
+dart run pigeon --input ./pigeons/messages.dart
+```

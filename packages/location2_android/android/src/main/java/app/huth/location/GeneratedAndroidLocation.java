@@ -57,6 +57,20 @@ public class GeneratedAndroidLocation {
     return errorList;
   }
 
+  public enum PigeonLocationPermission {
+    NOT_DETERMINED(0),
+    RESTRICTED(1),
+    DENIED(2),
+    AUTHORIZED_ALWAYS(3),
+    AUTHORIZED_WHEN_IN_USE(4);
+
+    final int index;
+
+    private PigeonLocationPermission(final int index) {
+      this.index = index;
+    }
+  }
+
   public enum PigeonLocationAccuracy {
     POWER_SAVE(0),
     LOW(1),
@@ -133,24 +147,24 @@ public class GeneratedAndroidLocation {
       this.bearingAccuracyDegrees = setterArg;
     }
 
-    private @Nullable Double elaspedRealTimeNanos;
+    private @Nullable Double elapsedRealTimeNanos;
 
-    public @Nullable Double getElaspedRealTimeNanos() {
-      return elaspedRealTimeNanos;
+    public @Nullable Double getElapsedRealTimeNanos() {
+      return elapsedRealTimeNanos;
     }
 
-    public void setElaspedRealTimeNanos(@Nullable Double setterArg) {
-      this.elaspedRealTimeNanos = setterArg;
+    public void setElapsedRealTimeNanos(@Nullable Double setterArg) {
+      this.elapsedRealTimeNanos = setterArg;
     }
 
-    private @Nullable Double elaspedRealTimeUncertaintyNanos;
+    private @Nullable Double elapsedRealTimeUncertaintyNanos;
 
-    public @Nullable Double getElaspedRealTimeUncertaintyNanos() {
-      return elaspedRealTimeUncertaintyNanos;
+    public @Nullable Double getElapsedRealTimeUncertaintyNanos() {
+      return elapsedRealTimeUncertaintyNanos;
     }
 
-    public void setElaspedRealTimeUncertaintyNanos(@Nullable Double setterArg) {
-      this.elaspedRealTimeUncertaintyNanos = setterArg;
+    public void setElapsedRealTimeUncertaintyNanos(@Nullable Double setterArg) {
+      this.elapsedRealTimeUncertaintyNanos = setterArg;
     }
 
     private @Nullable Long satellites;
@@ -257,17 +271,17 @@ public class GeneratedAndroidLocation {
         return this;
       }
 
-      private @Nullable Double elaspedRealTimeNanos;
+      private @Nullable Double elapsedRealTimeNanos;
 
-      public @NonNull Builder setElaspedRealTimeNanos(@Nullable Double setterArg) {
-        this.elaspedRealTimeNanos = setterArg;
+      public @NonNull Builder setElapsedRealTimeNanos(@Nullable Double setterArg) {
+        this.elapsedRealTimeNanos = setterArg;
         return this;
       }
 
-      private @Nullable Double elaspedRealTimeUncertaintyNanos;
+      private @Nullable Double elapsedRealTimeUncertaintyNanos;
 
-      public @NonNull Builder setElaspedRealTimeUncertaintyNanos(@Nullable Double setterArg) {
-        this.elaspedRealTimeUncertaintyNanos = setterArg;
+      public @NonNull Builder setElapsedRealTimeUncertaintyNanos(@Nullable Double setterArg) {
+        this.elapsedRealTimeUncertaintyNanos = setterArg;
         return this;
       }
 
@@ -321,8 +335,8 @@ public class GeneratedAndroidLocation {
         pigeonReturn.setAltitude(altitude);
         pigeonReturn.setBearing(bearing);
         pigeonReturn.setBearingAccuracyDegrees(bearingAccuracyDegrees);
-        pigeonReturn.setElaspedRealTimeNanos(elaspedRealTimeNanos);
-        pigeonReturn.setElaspedRealTimeUncertaintyNanos(elaspedRealTimeUncertaintyNanos);
+        pigeonReturn.setElapsedRealTimeNanos(elapsedRealTimeNanos);
+        pigeonReturn.setElapsedRealTimeUncertaintyNanos(elapsedRealTimeUncertaintyNanos);
         pigeonReturn.setSatellites(satellites);
         pigeonReturn.setSpeed(speed);
         pigeonReturn.setSpeedAccuracy(speedAccuracy);
@@ -342,8 +356,8 @@ public class GeneratedAndroidLocation {
       toListResult.add(altitude);
       toListResult.add(bearing);
       toListResult.add(bearingAccuracyDegrees);
-      toListResult.add(elaspedRealTimeNanos);
-      toListResult.add(elaspedRealTimeUncertaintyNanos);
+      toListResult.add(elapsedRealTimeNanos);
+      toListResult.add(elapsedRealTimeUncertaintyNanos);
       toListResult.add(satellites);
       toListResult.add(speed);
       toListResult.add(speedAccuracy);
@@ -367,10 +381,10 @@ public class GeneratedAndroidLocation {
       pigeonResult.setBearing((Double) bearing);
       Object bearingAccuracyDegrees = list.get(5);
       pigeonResult.setBearingAccuracyDegrees((Double) bearingAccuracyDegrees);
-      Object elaspedRealTimeNanos = list.get(6);
-      pigeonResult.setElaspedRealTimeNanos((Double) elaspedRealTimeNanos);
-      Object elaspedRealTimeUncertaintyNanos = list.get(7);
-      pigeonResult.setElaspedRealTimeUncertaintyNanos((Double) elaspedRealTimeUncertaintyNanos);
+      Object elapsedRealTimeNanos = list.get(6);
+      pigeonResult.setElapsedRealTimeNanos((Double) elapsedRealTimeNanos);
+      Object elapsedRealTimeUncertaintyNanos = list.get(7);
+      pigeonResult.setElapsedRealTimeUncertaintyNanos((Double) elapsedRealTimeUncertaintyNanos);
       Object satellites = list.get(8);
       pigeonResult.setSatellites((satellites == null) ? null : ((satellites instanceof Integer) ? (Integer) satellites : (Long) satellites));
       Object speed = list.get(9);
@@ -383,6 +397,49 @@ public class GeneratedAndroidLocation {
       pigeonResult.setVerticalAccuracy((Double) verticalAccuracy);
       Object isMock = list.get(13);
       pigeonResult.setIsMock((Boolean) isMock);
+      return pigeonResult;
+    }
+  }
+
+  /** Generated class from Pigeon that represents data sent in messages. */
+  public static final class PigeonLocationPermissionData {
+    private @Nullable PigeonLocationPermission pigeonLocationPermission;
+
+    public @Nullable PigeonLocationPermission getPigeonLocationPermission() {
+      return pigeonLocationPermission;
+    }
+
+    public void setPigeonLocationPermission(@Nullable PigeonLocationPermission setterArg) {
+      this.pigeonLocationPermission = setterArg;
+    }
+
+    public static final class Builder {
+
+      private @Nullable PigeonLocationPermission pigeonLocationPermission;
+
+      public @NonNull Builder setPigeonLocationPermission(@Nullable PigeonLocationPermission setterArg) {
+        this.pigeonLocationPermission = setterArg;
+        return this;
+      }
+
+      public @NonNull PigeonLocationPermissionData build() {
+        PigeonLocationPermissionData pigeonReturn = new PigeonLocationPermissionData();
+        pigeonReturn.setPigeonLocationPermission(pigeonLocationPermission);
+        return pigeonReturn;
+      }
+    }
+
+    @NonNull
+    ArrayList<Object> toList() {
+      ArrayList<Object> toListResult = new ArrayList<Object>(1);
+      toListResult.add(pigeonLocationPermission == null ? null : pigeonLocationPermission.index);
+      return toListResult;
+    }
+
+    static @NonNull PigeonLocationPermissionData fromList(@NonNull ArrayList<Object> list) {
+      PigeonLocationPermissionData pigeonResult = new PigeonLocationPermissionData();
+      Object pigeonLocationPermission = list.get(0);
+      pigeonResult.setPigeonLocationPermission(pigeonLocationPermission == null ? null : PigeonLocationPermission.values()[(int) pigeonLocationPermission]);
       return pigeonResult;
     }
   }
@@ -1016,10 +1073,12 @@ public class GeneratedAndroidLocation {
         case (byte) 128:
           return PigeonLocationData.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 129:
-          return PigeonLocationSettings.fromList((ArrayList<Object>) readValue(buffer));
+          return PigeonLocationPermissionData.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 130:
           return PigeonLocationSettings.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 131:
+          return PigeonLocationSettings.fromList((ArrayList<Object>) readValue(buffer));
+        case (byte) 132:
           return PigeonNotificationSettings.fromList((ArrayList<Object>) readValue(buffer));
         default:
           return super.readValueOfType(type, buffer);
@@ -1031,14 +1090,17 @@ public class GeneratedAndroidLocation {
       if (value instanceof PigeonLocationData) {
         stream.write(128);
         writeValue(stream, ((PigeonLocationData) value).toList());
-      } else if (value instanceof PigeonLocationSettings) {
+      } else if (value instanceof PigeonLocationPermissionData) {
         stream.write(129);
-        writeValue(stream, ((PigeonLocationSettings) value).toList());
+        writeValue(stream, ((PigeonLocationPermissionData) value).toList());
       } else if (value instanceof PigeonLocationSettings) {
         stream.write(130);
         writeValue(stream, ((PigeonLocationSettings) value).toList());
-      } else if (value instanceof PigeonNotificationSettings) {
+      } else if (value instanceof PigeonLocationSettings) {
         stream.write(131);
+        writeValue(stream, ((PigeonLocationSettings) value).toList());
+      } else if (value instanceof PigeonNotificationSettings) {
+        stream.write(132);
         writeValue(stream, ((PigeonNotificationSettings) value).toList());
       } else {
         super.writeValue(stream, value);
@@ -1057,7 +1119,14 @@ public class GeneratedAndroidLocation {
     @NonNull 
     Long getPermissionStatus();
 
-    void requestPermission(@NonNull Result<Long> result);
+    @NonNull 
+    Long requestPermission();
+
+    @NonNull 
+    PigeonLocationPermissionData getLocationPermissionStatus();
+
+    @NonNull 
+    PigeonLocationPermissionData requestLocationPermission(@NonNull PigeonLocationPermission permission);
 
     @NonNull 
     Boolean isGPSEnabled();
@@ -1166,20 +1235,61 @@ public class GeneratedAndroidLocation {
           channel.setMessageHandler(
               (message, reply) -> {
                 ArrayList<Object> wrapped = new ArrayList<Object>();
-                Result<Long> resultCallback =
-                    new Result<Long>() {
-                      public void success(Long result) {
-                        wrapped.add(0, result);
-                        reply.reply(wrapped);
-                      }
-
-                      public void error(Throwable error) {
-                        ArrayList<Object> wrappedError = wrapError(error);
-                        reply.reply(wrappedError);
-                      }
-                    };
-
-                api.requestPermission(resultCallback);
+                try {
+                  Long output = api.requestPermission();
+                  wrapped.add(0, output);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.LocationHostApi.getLocationPermissionStatus", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                try {
+                  PigeonLocationPermissionData output = api.getLocationPermissionStatus();
+                  wrapped.add(0, output);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
+              });
+        } else {
+          channel.setMessageHandler(null);
+        }
+      }
+      {
+        BasicMessageChannel<Object> channel =
+            new BasicMessageChannel<>(
+                binaryMessenger, "dev.flutter.pigeon.LocationHostApi.requestLocationPermission", getCodec());
+        if (api != null) {
+          channel.setMessageHandler(
+              (message, reply) -> {
+                ArrayList<Object> wrapped = new ArrayList<Object>();
+                ArrayList<Object> args = (ArrayList<Object>) message;
+                PigeonLocationPermission permissionArg = args.get(0) == null ? null : PigeonLocationPermission.values()[(int) args.get(0)];
+                try {
+                  PigeonLocationPermissionData output = api.requestLocationPermission(permissionArg);
+                  wrapped.add(0, output);
+                }
+ catch (Throwable exception) {
+                  ArrayList<Object> wrappedError = wrapError(exception);
+                  wrapped = wrappedError;
+                }
+                reply.reply(wrapped);
               });
         } else {
           channel.setMessageHandler(null);
@@ -1321,6 +1431,17 @@ public class GeneratedAndroidLocation {
           channel.setMessageHandler(null);
         }
       }
+    }
+  }
+  /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
+  public interface PermissionsHostApi {
+
+    /** The codec used by PermissionsHostApi. */
+    static @NonNull MessageCodec<Object> getCodec() {
+      return new StandardMessageCodec();
+    }
+    /**Sets up an instance of `PermissionsHostApi` to handle messages through the `binaryMessenger`. */
+    static void setup(@NonNull BinaryMessenger binaryMessenger, @Nullable PermissionsHostApi api) {
     }
   }
 }

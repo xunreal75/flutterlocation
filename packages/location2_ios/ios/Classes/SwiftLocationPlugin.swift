@@ -35,8 +35,6 @@ public class SwiftLocationPlugin: NSObject, FlutterPlugin, LocationHostApi, UIAp
         registrar.addApplicationDelegate(self)
     }
     
-    
-    
     public func getLocationSettings(_ settings: PigeonLocationSettings?, completion: @escaping (PigeonLocationData?, FlutterError?) -> Void) {
         if !CLLocationManager.locationServicesEnabled() {
             UIApplication.shared.open(URL(string:UIApplication.openSettingsURLString)!)
@@ -77,8 +75,8 @@ public class SwiftLocationPlugin: NSObject, FlutterPlugin, LocationHostApi, UIAp
                 altitude: NSNumber(value: location.altitude),
                 bearing: NSNumber(value: location.course),
                 bearingAccuracyDegrees: NSNumber(value: location.courseAccuracy),
-                elaspedRealTimeNanos: nil,
-                elaspedRealTimeUncertaintyNanos: nil,
+                elapsedRealTimeNanos: nil,
+                elapsedRealTimeUncertaintyNanos: nil,
                 satellites: nil,
                 speed: NSNumber(value: location.speed),
                 speedAccuracy: NSNumber(value: location.speedAccuracy),
@@ -93,8 +91,8 @@ public class SwiftLocationPlugin: NSObject, FlutterPlugin, LocationHostApi, UIAp
                 altitude: NSNumber(value: location.altitude),
                 bearing: NSNumber(value: location.course),
                 bearingAccuracyDegrees: nil,
-                elaspedRealTimeNanos: nil,
-                elaspedRealTimeUncertaintyNanos: nil,
+                elapsedRealTimeNanos: nil,
+                elapsedRealTimeUncertaintyNanos: nil,
                 satellites: nil,
                 speed: NSNumber(value: location.speed),
                 speedAccuracy: NSNumber(value: location.speedAccuracy),

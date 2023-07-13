@@ -8,6 +8,14 @@ import 'dart:typed_data' show Float64List, Int32List, Int64List, Uint8List;
 import 'package:flutter/foundation.dart' show ReadBuffer, WriteBuffer;
 import 'package:flutter/services.dart';
 
+enum PigeonLocationPermission {
+  notDetermined,
+  restricted,
+  denied,
+  authorizedAlways,
+  authorizedWhenInUse,
+}
+
 enum PigeonLocationAccuracy {
   powerSave,
   low,
@@ -24,8 +32,8 @@ class PigeonLocationData {
     this.altitude,
     this.bearing,
     this.bearingAccuracyDegrees,
-    this.elaspedRealTimeNanos,
-    this.elaspedRealTimeUncertaintyNanos,
+    this.elapsedRealTimeNanos,
+    this.elapsedRealTimeUncertaintyNanos,
     this.satellites,
     this.speed,
     this.speedAccuracy,
@@ -46,9 +54,9 @@ class PigeonLocationData {
 
   double? bearingAccuracyDegrees;
 
-  double? elaspedRealTimeNanos;
+  double? elapsedRealTimeNanos;
 
-  double? elaspedRealTimeUncertaintyNanos;
+  double? elapsedRealTimeUncertaintyNanos;
 
   int? satellites;
 
@@ -70,8 +78,8 @@ class PigeonLocationData {
       altitude,
       bearing,
       bearingAccuracyDegrees,
-      elaspedRealTimeNanos,
-      elaspedRealTimeUncertaintyNanos,
+      elapsedRealTimeNanos,
+      elapsedRealTimeUncertaintyNanos,
       satellites,
       speed,
       speedAccuracy,
@@ -90,14 +98,37 @@ class PigeonLocationData {
       altitude: result[3] as double?,
       bearing: result[4] as double?,
       bearingAccuracyDegrees: result[5] as double?,
-      elaspedRealTimeNanos: result[6] as double?,
-      elaspedRealTimeUncertaintyNanos: result[7] as double?,
+      elapsedRealTimeNanos: result[6] as double?,
+      elapsedRealTimeUncertaintyNanos: result[7] as double?,
       satellites: result[8] as int?,
       speed: result[9] as double?,
       speedAccuracy: result[10] as double?,
       time: result[11] as double?,
       verticalAccuracy: result[12] as double?,
       isMock: result[13] as bool?,
+    );
+  }
+}
+
+class PigeonLocationPermissionData {
+  PigeonLocationPermissionData({
+    this.pigeonLocationPermission,
+  });
+
+  PigeonLocationPermission? pigeonLocationPermission;
+
+  Object encode() {
+    return <Object?>[
+      pigeonLocationPermission?.index,
+    ];
+  }
+
+  static PigeonLocationPermissionData decode(Object result) {
+    result as List<Object?>;
+    return PigeonLocationPermissionData(
+      pigeonLocationPermission: result[0] != null
+          ? PigeonLocationPermission.values[result[0]! as int]
+          : null,
     );
   }
 }
@@ -266,14 +297,17 @@ class _LocationHostApiCodec extends StandardMessageCodec {
     if (value is PigeonLocationData) {
       buffer.putUint8(128);
       writeValue(buffer, value.encode());
-    } else if (value is PigeonLocationSettings) {
+    } else if (value is PigeonLocationPermissionData) {
       buffer.putUint8(129);
       writeValue(buffer, value.encode());
     } else if (value is PigeonLocationSettings) {
       buffer.putUint8(130);
       writeValue(buffer, value.encode());
-    } else if (value is PigeonNotificationSettings) {
+    } else if (value is PigeonLocationSettings) {
       buffer.putUint8(131);
+      writeValue(buffer, value.encode());
+    } else if (value is PigeonNotificationSettings) {
+      buffer.putUint8(132);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -286,10 +320,12 @@ class _LocationHostApiCodec extends StandardMessageCodec {
       case 128: 
         return PigeonLocationData.decode(readValue(buffer)!);
       case 129: 
-        return PigeonLocationSettings.decode(readValue(buffer)!);
+        return PigeonLocationPermissionData.decode(readValue(buffer)!);
       case 130: 
         return PigeonLocationSettings.decode(readValue(buffer)!);
       case 131: 
+        return PigeonLocationSettings.decode(readValue(buffer)!);
+      case 132: 
         return PigeonNotificationSettings.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -412,6 +448,60 @@ class LocationHostApi {
       );
     } else {
       return (replyList[0] as int?)!;
+    }
+  }
+
+  Future<PigeonLocationPermissionData> getLocationPermissionStatus() async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.LocationHostApi.getLocationPermissionStatus', codec,
+        binaryMessenger: _binaryMessenger);
+    final List<Object?>? replyList =
+        await channel.send(null) as List<Object?>?;
+    if (replyList == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyList.length > 1) {
+      throw PlatformException(
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
+      );
+    } else if (replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (replyList[0] as PigeonLocationPermissionData?)!;
+    }
+  }
+
+  Future<PigeonLocationPermissionData> requestLocationPermission(PigeonLocationPermission arg_permission) async {
+    final BasicMessageChannel<Object?> channel = BasicMessageChannel<Object?>(
+        'dev.flutter.pigeon.LocationHostApi.requestLocationPermission', codec,
+        binaryMessenger: _binaryMessenger);
+    final List<Object?>? replyList =
+        await channel.send(<Object?>[arg_permission.index]) as List<Object?>?;
+    if (replyList == null) {
+      throw PlatformException(
+        code: 'channel-error',
+        message: 'Unable to establish connection on channel.',
+      );
+    } else if (replyList.length > 1) {
+      throw PlatformException(
+        code: replyList[0]! as String,
+        message: replyList[1] as String?,
+        details: replyList[2],
+      );
+    } else if (replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (replyList[0] as PigeonLocationPermissionData?)!;
     }
   }
 
@@ -576,4 +666,16 @@ class LocationHostApi {
       return (replyList[0] as bool?)!;
     }
   }
+}
+
+class PermissionsHostApi {
+  /// Constructor for [PermissionsHostApi].  The [binaryMessenger] named argument is
+  /// available for dependency injection.  If it is left null, the default
+  /// BinaryMessenger will be used which routes to the host platform.
+  PermissionsHostApi({BinaryMessenger? binaryMessenger})
+      : _binaryMessenger = binaryMessenger;
+  final BinaryMessenger? _binaryMessenger;
+
+  static const MessageCodec<Object?> codec = StandardMessageCodec();
+
 }

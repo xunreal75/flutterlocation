@@ -4,10 +4,11 @@ part of '../location2_platform_interface.dart';
 
 // Those types are often a direct reflect of the Pigeon implementation
 // but since Pigeon does not support comments
-// there is a passthrough to the user facing types.
+// there is a pass through to the user facing types.
 
 /// {@template location2_data}
-/// The response object of [LocationPlatform.getLocation] and [LocationPlatform.onLocationChanged].
+/// The response object of [LocationPlatform.getLocation] and
+/// [LocationPlatform.onLocationChanged].
 /// {@endtemplate}
 class LocationData {
   /// {@macro location2_data}
@@ -18,8 +19,8 @@ class LocationData {
     this.altitude,
     this.bearing,
     this.bearingAccuracyDegrees,
-    this.elaspedRealTimeNanos,
-    this.elaspedRealTimeUncertaintyNanos,
+    this.elapsedRealTimeNanos,
+    this.elapsedRealTimeUncertaintyNanos,
     this.satellites,
     this.speed,
     this.speedAccuracy,
@@ -37,9 +38,9 @@ class LocationData {
       altitude: pigeonData.altitude,
       bearing: pigeonData.bearing,
       bearingAccuracyDegrees: pigeonData.bearingAccuracyDegrees,
-      elaspedRealTimeNanos: pigeonData.elaspedRealTimeNanos,
-      elaspedRealTimeUncertaintyNanos:
-          pigeonData.elaspedRealTimeUncertaintyNanos,
+      elapsedRealTimeNanos: pigeonData.elapsedRealTimeNanos,
+      elapsedRealTimeUncertaintyNanos:
+          pigeonData.elapsedRealTimeUncertaintyNanos,
       satellites: pigeonData.satellites,
       speed: pigeonData.speed,
       speedAccuracy: pigeonData.speedAccuracy,
@@ -99,12 +100,14 @@ class LocationData {
   /// Return the time of this fix, in elapsed real-time since system boot.
   /// Only available on Android
   /// https://developer.android.com/reference/android/location/Location#getElapsedRealtimeNanos()
-  final double? elaspedRealTimeNanos;
+  final double? elapsedRealTimeNanos;
 
   /// Get estimate of the relative precision of the alignment of the ElapsedRealtimeNanos timestamp.
   /// Only available on Android
   /// https://developer.android.com/reference/android/location/Location#getElapsedRealtimeUncertaintyNanos()
-  final double? elaspedRealTimeUncertaintyNanos;
+  final double? elapsedRealTimeUncertaintyNanos;
+
+  @Deprecated('not used anymore')
 
   /// The number of satellites used to derive the fix.
   /// Only available on Android
@@ -153,6 +156,73 @@ extension LocationAccuracyExtension on LocationAccuracy {
   }
 }
 
+/// {@template location2_data}
+/// The response object of [LocationPlatform.getLocationPermissionStatus],[] and
+/// [LocationPlatform.onLocationPermissionChanged].
+/// {@endtemplate}
+class LocationPermissionData {
+  /// {@macro locationPermissionData}
+  LocationPermissionData({this.locationPermission});
+
+  /// Constructor from a Pigeon LocationPermissionData.
+  factory LocationPermissionData.fromPigeon(
+      PigeonLocationPermissionData pigeonData) {
+    if (pigeonData.pigeonLocationPermission == null) {
+      return LocationPermissionData(
+          locationPermission: LocationPermission.notDetermined);
+    }
+
+    return LocationPermissionData(
+        locationPermission: LocationPermission
+            .values[pigeonData.pigeonLocationPermission!.index]);
+  }
+
+  ///Type of location permission -- see [LocationPermission]
+  LocationPermission? locationPermission;
+}
+
+/// Status of a granted permission or requested to use location services.
+enum LocationPermission {
+  /// User has not yet made a choice with regards to this application
+  notDetermined,
+
+  /// This application is not authorized to use precise
+  restricted,
+
+  /// User has explicitly denied authorization for this application, or
+  /// location services are disabled in Settings.
+  denied,
+
+  /// User has granted authorization to use their location at any
+  /// time. Your app may be launched into the background by
+  /// monitoring APIs such as visit monitoring, region monitoring,
+  /// and significant location change monitoring.
+  authorizedAlways,
+
+  /// User has granted authorization to use their location only while
+  /// they are using your app.
+  authorizedWhenInUse,
+}
+
+/// Extended to [LocationPermission].
+extension LocationPermissionExtension on LocationPermission {
+  /// Convert the LocationPermissionStatus to the Pigeon equivalent.
+  PigeonLocationPermission toPigeon() {
+    switch (this) {
+      case LocationPermission.notDetermined:
+        return PigeonLocationPermission.notDetermined;
+      case LocationPermission.restricted:
+        return PigeonLocationPermission.restricted;
+      case LocationPermission.denied:
+        return PigeonLocationPermission.denied;
+      case LocationPermission.authorizedAlways:
+        return PigeonLocationPermission.authorizedAlways;
+      case LocationPermission.authorizedWhenInUse:
+        return PigeonLocationPermission.authorizedWhenInUse;
+    }
+  }
+}
+
 /// Status of a permission request to use location services.
 enum PermissionStatus {
   /// User has not yet made a choice with regards to this application
@@ -196,7 +266,7 @@ class LocationSettings {
     this.rationaleMessageForPermissionRequest =
         'The app needs to access your location',
     this.rationaleMessageForGPSRequest =
-        'The app needs to access your location',
+        'The app needs to access your GPS location',
     this.useGooglePlayServices = true,
     this.askForGooglePlayServices = false,
     this.askForGPS = true,

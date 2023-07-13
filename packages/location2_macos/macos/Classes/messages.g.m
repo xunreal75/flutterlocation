@@ -49,8 +49,8 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
     altitude:(nullable NSNumber *)altitude
     bearing:(nullable NSNumber *)bearing
     bearingAccuracyDegrees:(nullable NSNumber *)bearingAccuracyDegrees
-    elaspedRealTimeNanos:(nullable NSNumber *)elaspedRealTimeNanos
-    elaspedRealTimeUncertaintyNanos:(nullable NSNumber *)elaspedRealTimeUncertaintyNanos
+    elapsedRealTimeNanos:(nullable NSNumber *)elapsedRealTimeNanos
+    elapsedRealTimeUncertaintyNanos:(nullable NSNumber *)elapsedRealTimeUncertaintyNanos
     satellites:(nullable NSNumber *)satellites
     speed:(nullable NSNumber *)speed
     speedAccuracy:(nullable NSNumber *)speedAccuracy
@@ -64,8 +64,8 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
   pigeonResult.altitude = altitude;
   pigeonResult.bearing = bearing;
   pigeonResult.bearingAccuracyDegrees = bearingAccuracyDegrees;
-  pigeonResult.elaspedRealTimeNanos = elaspedRealTimeNanos;
-  pigeonResult.elaspedRealTimeUncertaintyNanos = elaspedRealTimeUncertaintyNanos;
+  pigeonResult.elapsedRealTimeNanos = elapsedRealTimeNanos;
+  pigeonResult.elapsedRealTimeUncertaintyNanos = elapsedRealTimeUncertaintyNanos;
   pigeonResult.satellites = satellites;
   pigeonResult.speed = speed;
   pigeonResult.speedAccuracy = speedAccuracy;
@@ -82,8 +82,8 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
   pigeonResult.altitude = GetNullableObject(dict, @"altitude");
   pigeonResult.bearing = GetNullableObject(dict, @"bearing");
   pigeonResult.bearingAccuracyDegrees = GetNullableObject(dict, @"bearingAccuracyDegrees");
-  pigeonResult.elaspedRealTimeNanos = GetNullableObject(dict, @"elaspedRealTimeNanos");
-  pigeonResult.elaspedRealTimeUncertaintyNanos = GetNullableObject(dict, @"elaspedRealTimeUncertaintyNanos");
+  pigeonResult.elapsedRealTimeNanos = GetNullableObject(dict, @"elapsedRealTimeNanos");
+  pigeonResult.elapsedRealTimeUncertaintyNanos = GetNullableObject(dict, @"elapsedRealTimeUncertaintyNanos");
   pigeonResult.satellites = GetNullableObject(dict, @"satellites");
   pigeonResult.speed = GetNullableObject(dict, @"speed");
   pigeonResult.speedAccuracy = GetNullableObject(dict, @"speedAccuracy");
@@ -101,8 +101,8 @@ static id GetNullableObjectAtIndex(NSArray* array, NSInteger key) {
     @"altitude" : (self.altitude ?: [NSNull null]),
     @"bearing" : (self.bearing ?: [NSNull null]),
     @"bearingAccuracyDegrees" : (self.bearingAccuracyDegrees ?: [NSNull null]),
-    @"elaspedRealTimeNanos" : (self.elaspedRealTimeNanos ?: [NSNull null]),
-    @"elaspedRealTimeUncertaintyNanos" : (self.elaspedRealTimeUncertaintyNanos ?: [NSNull null]),
+    @"elapsedRealTimeNanos" : (self.elapsedRealTimeNanos ?: [NSNull null]),
+    @"elapsedRealTimeUncertaintyNanos" : (self.elapsedRealTimeUncertaintyNanos ?: [NSNull null]),
     @"satellites" : (self.satellites ?: [NSNull null]),
     @"speed" : (self.speed ?: [NSNull null]),
     @"speedAccuracy" : (self.speedAccuracy ?: [NSNull null]),

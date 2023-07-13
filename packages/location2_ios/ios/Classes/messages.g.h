@@ -10,6 +10,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSUInteger, PigeonLocationPermission) {
+  PigeonLocationPermissionNotDetermined = 0,
+  PigeonLocationPermissionRestricted = 1,
+  PigeonLocationPermissionDenied = 2,
+  PigeonLocationPermissionAuthorizedAlways = 3,
+  PigeonLocationPermissionAuthorizedWhenInUse = 4,
+};
+
 typedef NS_ENUM(NSUInteger, PigeonLocationAccuracy) {
   PigeonLocationAccuracyPowerSave = 0,
   PigeonLocationAccuracyLow = 1,
@@ -19,6 +27,7 @@ typedef NS_ENUM(NSUInteger, PigeonLocationAccuracy) {
 };
 
 @class PigeonLocationData;
+@class PigeonLocationPermissionData;
 @class PigeonNotificationSettings;
 @class PigeonLocationSettings;
 
@@ -29,8 +38,8 @@ typedef NS_ENUM(NSUInteger, PigeonLocationAccuracy) {
     altitude:(nullable NSNumber *)altitude
     bearing:(nullable NSNumber *)bearing
     bearingAccuracyDegrees:(nullable NSNumber *)bearingAccuracyDegrees
-    elaspedRealTimeNanos:(nullable NSNumber *)elaspedRealTimeNanos
-    elaspedRealTimeUncertaintyNanos:(nullable NSNumber *)elaspedRealTimeUncertaintyNanos
+    elapsedRealTimeNanos:(nullable NSNumber *)elapsedRealTimeNanos
+    elapsedRealTimeUncertaintyNanos:(nullable NSNumber *)elapsedRealTimeUncertaintyNanos
     satellites:(nullable NSNumber *)satellites
     speed:(nullable NSNumber *)speed
     speedAccuracy:(nullable NSNumber *)speedAccuracy
@@ -43,14 +52,19 @@ typedef NS_ENUM(NSUInteger, PigeonLocationAccuracy) {
 @property(nonatomic, strong, nullable) NSNumber * altitude;
 @property(nonatomic, strong, nullable) NSNumber * bearing;
 @property(nonatomic, strong, nullable) NSNumber * bearingAccuracyDegrees;
-@property(nonatomic, strong, nullable) NSNumber * elaspedRealTimeNanos;
-@property(nonatomic, strong, nullable) NSNumber * elaspedRealTimeUncertaintyNanos;
+@property(nonatomic, strong, nullable) NSNumber * elapsedRealTimeNanos;
+@property(nonatomic, strong, nullable) NSNumber * elapsedRealTimeUncertaintyNanos;
 @property(nonatomic, strong, nullable) NSNumber * satellites;
 @property(nonatomic, strong, nullable) NSNumber * speed;
 @property(nonatomic, strong, nullable) NSNumber * speedAccuracy;
 @property(nonatomic, strong, nullable) NSNumber * time;
 @property(nonatomic, strong, nullable) NSNumber * verticalAccuracy;
 @property(nonatomic, strong, nullable) NSNumber * isMock;
+@end
+
+@interface PigeonLocationPermissionData : NSObject
++ (instancetype)makeWithPigeonLocationPermission:(PigeonLocationPermission)pigeonLocationPermission;
+@property(nonatomic, assign) PigeonLocationPermission pigeonLocationPermission;
 @end
 
 @interface PigeonNotificationSettings : NSObject
@@ -120,7 +134,12 @@ NSObject<FlutterMessageCodec> *LocationHostApiGetCodec(void);
 - (nullable NSNumber *)setLocationSettingsSettings:(PigeonLocationSettings *)settings error:(FlutterError *_Nullable *_Nonnull)error;
 /// @return `nil` only when `error != nil`.
 - (nullable NSNumber *)getPermissionStatusWithError:(FlutterError *_Nullable *_Nonnull)error;
-- (void)requestPermissionWithCompletion:(void (^)(NSNumber *_Nullable, FlutterError *_Nullable))completion;
+/// @return `nil` only when `error != nil`.
+- (nullable NSNumber *)requestPermissionWithError:(FlutterError *_Nullable *_Nonnull)error;
+/// @return `nil` only when `error != nil`.
+- (nullable PigeonLocationPermissionData *)getLocationPermissionStatusWithError:(FlutterError *_Nullable *_Nonnull)error;
+/// @return `nil` only when `error != nil`.
+- (nullable PigeonLocationPermissionData *)requestLocationPermissionPermission:(PigeonLocationPermission)permission error:(FlutterError *_Nullable *_Nonnull)error;
 /// @return `nil` only when `error != nil`.
 - (nullable NSNumber *)isGPSEnabledWithError:(FlutterError *_Nullable *_Nonnull)error;
 /// @return `nil` only when `error != nil`.
@@ -136,5 +155,13 @@ NSObject<FlutterMessageCodec> *LocationHostApiGetCodec(void);
 @end
 
 extern void LocationHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<LocationHostApi> *_Nullable api);
+
+/// The codec used by PermissionsHostApi.
+NSObject<FlutterMessageCodec> *PermissionsHostApiGetCodec(void);
+
+@protocol PermissionsHostApi
+@end
+
+extern void PermissionsHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<PermissionsHostApi> *_Nullable api);
 
 NS_ASSUME_NONNULL_END

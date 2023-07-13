@@ -32,6 +32,12 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
 - (NSArray *)toList;
 @end
 
+@interface PigeonLocationPermissionData ()
++ (PigeonLocationPermissionData *)fromList:(NSArray *)list;
++ (nullable PigeonLocationPermissionData *)nullableFromList:(NSArray *)list;
+- (NSArray *)toList;
+@end
+
 @interface PigeonNotificationSettings ()
 + (PigeonNotificationSettings *)fromList:(NSArray *)list;
 + (nullable PigeonNotificationSettings *)nullableFromList:(NSArray *)list;
@@ -51,8 +57,8 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
     altitude:(nullable NSNumber *)altitude
     bearing:(nullable NSNumber *)bearing
     bearingAccuracyDegrees:(nullable NSNumber *)bearingAccuracyDegrees
-    elaspedRealTimeNanos:(nullable NSNumber *)elaspedRealTimeNanos
-    elaspedRealTimeUncertaintyNanos:(nullable NSNumber *)elaspedRealTimeUncertaintyNanos
+    elapsedRealTimeNanos:(nullable NSNumber *)elapsedRealTimeNanos
+    elapsedRealTimeUncertaintyNanos:(nullable NSNumber *)elapsedRealTimeUncertaintyNanos
     satellites:(nullable NSNumber *)satellites
     speed:(nullable NSNumber *)speed
     speedAccuracy:(nullable NSNumber *)speedAccuracy
@@ -66,8 +72,8 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
   pigeonResult.altitude = altitude;
   pigeonResult.bearing = bearing;
   pigeonResult.bearingAccuracyDegrees = bearingAccuracyDegrees;
-  pigeonResult.elaspedRealTimeNanos = elaspedRealTimeNanos;
-  pigeonResult.elaspedRealTimeUncertaintyNanos = elaspedRealTimeUncertaintyNanos;
+  pigeonResult.elapsedRealTimeNanos = elapsedRealTimeNanos;
+  pigeonResult.elapsedRealTimeUncertaintyNanos = elapsedRealTimeUncertaintyNanos;
   pigeonResult.satellites = satellites;
   pigeonResult.speed = speed;
   pigeonResult.speedAccuracy = speedAccuracy;
@@ -84,8 +90,8 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
   pigeonResult.altitude = GetNullableObjectAtIndex(list, 3);
   pigeonResult.bearing = GetNullableObjectAtIndex(list, 4);
   pigeonResult.bearingAccuracyDegrees = GetNullableObjectAtIndex(list, 5);
-  pigeonResult.elaspedRealTimeNanos = GetNullableObjectAtIndex(list, 6);
-  pigeonResult.elaspedRealTimeUncertaintyNanos = GetNullableObjectAtIndex(list, 7);
+  pigeonResult.elapsedRealTimeNanos = GetNullableObjectAtIndex(list, 6);
+  pigeonResult.elapsedRealTimeUncertaintyNanos = GetNullableObjectAtIndex(list, 7);
   pigeonResult.satellites = GetNullableObjectAtIndex(list, 8);
   pigeonResult.speed = GetNullableObjectAtIndex(list, 9);
   pigeonResult.speedAccuracy = GetNullableObjectAtIndex(list, 10);
@@ -105,14 +111,35 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
     (self.altitude ?: [NSNull null]),
     (self.bearing ?: [NSNull null]),
     (self.bearingAccuracyDegrees ?: [NSNull null]),
-    (self.elaspedRealTimeNanos ?: [NSNull null]),
-    (self.elaspedRealTimeUncertaintyNanos ?: [NSNull null]),
+    (self.elapsedRealTimeNanos ?: [NSNull null]),
+    (self.elapsedRealTimeUncertaintyNanos ?: [NSNull null]),
     (self.satellites ?: [NSNull null]),
     (self.speed ?: [NSNull null]),
     (self.speedAccuracy ?: [NSNull null]),
     (self.time ?: [NSNull null]),
     (self.verticalAccuracy ?: [NSNull null]),
     (self.isMock ?: [NSNull null]),
+  ];
+}
+@end
+
+@implementation PigeonLocationPermissionData
++ (instancetype)makeWithPigeonLocationPermission:(PigeonLocationPermission)pigeonLocationPermission {
+  PigeonLocationPermissionData* pigeonResult = [[PigeonLocationPermissionData alloc] init];
+  pigeonResult.pigeonLocationPermission = pigeonLocationPermission;
+  return pigeonResult;
+}
++ (PigeonLocationPermissionData *)fromList:(NSArray *)list {
+  PigeonLocationPermissionData *pigeonResult = [[PigeonLocationPermissionData alloc] init];
+  pigeonResult.pigeonLocationPermission = [GetNullableObjectAtIndex(list, 0) integerValue];
+  return pigeonResult;
+}
++ (nullable PigeonLocationPermissionData *)nullableFromList:(NSArray *)list {
+  return (list) ? [PigeonLocationPermissionData fromList:list] : nil;
+}
+- (NSArray *)toList {
+  return @[
+    @(self.pigeonLocationPermission),
   ];
 }
 @end
@@ -271,10 +298,12 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
     case 128: 
       return [PigeonLocationData fromList:[self readValue]];
     case 129: 
-      return [PigeonLocationSettings fromList:[self readValue]];
+      return [PigeonLocationPermissionData fromList:[self readValue]];
     case 130: 
       return [PigeonLocationSettings fromList:[self readValue]];
     case 131: 
+      return [PigeonLocationSettings fromList:[self readValue]];
+    case 132: 
       return [PigeonNotificationSettings fromList:[self readValue]];
     default:
       return [super readValueOfType:type];
@@ -289,14 +318,17 @@ static id GetNullableObjectAtIndex(NSArray *array, NSInteger key) {
   if ([value isKindOfClass:[PigeonLocationData class]]) {
     [self writeByte:128];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[PigeonLocationSettings class]]) {
+  } else if ([value isKindOfClass:[PigeonLocationPermissionData class]]) {
     [self writeByte:129];
     [self writeValue:[value toList]];
   } else if ([value isKindOfClass:[PigeonLocationSettings class]]) {
     [self writeByte:130];
     [self writeValue:[value toList]];
-  } else if ([value isKindOfClass:[PigeonNotificationSettings class]]) {
+  } else if ([value isKindOfClass:[PigeonLocationSettings class]]) {
     [self writeByte:131];
+    [self writeValue:[value toList]];
+  } else if ([value isKindOfClass:[PigeonNotificationSettings class]]) {
+    [self writeByte:132];
     [self writeValue:[value toList]];
   } else {
     [super writeValue:value];
@@ -388,11 +420,47 @@ void LocationHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<L
         binaryMessenger:binaryMessenger
         codec:LocationHostApiGetCodec()];
     if (api) {
-      NSCAssert([api respondsToSelector:@selector(requestPermissionWithCompletion:)], @"LocationHostApi api (%@) doesn't respond to @selector(requestPermissionWithCompletion:)", api);
+      NSCAssert([api respondsToSelector:@selector(requestPermissionWithError:)], @"LocationHostApi api (%@) doesn't respond to @selector(requestPermissionWithError:)", api);
       [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
-        [api requestPermissionWithCompletion:^(NSNumber *_Nullable output, FlutterError *_Nullable error) {
-          callback(wrapResult(output, error));
-        }];
+        FlutterError *error;
+        NSNumber *output = [api requestPermissionWithError:&error];
+        callback(wrapResult(output, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.LocationHostApi.getLocationPermissionStatus"
+        binaryMessenger:binaryMessenger
+        codec:LocationHostApiGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(getLocationPermissionStatusWithError:)], @"LocationHostApi api (%@) doesn't respond to @selector(getLocationPermissionStatusWithError:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        FlutterError *error;
+        PigeonLocationPermissionData *output = [api getLocationPermissionStatusWithError:&error];
+        callback(wrapResult(output, error));
+      }];
+    } else {
+      [channel setMessageHandler:nil];
+    }
+  }
+  {
+    FlutterBasicMessageChannel *channel =
+      [[FlutterBasicMessageChannel alloc]
+        initWithName:@"dev.flutter.pigeon.LocationHostApi.requestLocationPermission"
+        binaryMessenger:binaryMessenger
+        codec:LocationHostApiGetCodec()];
+    if (api) {
+      NSCAssert([api respondsToSelector:@selector(requestLocationPermissionPermission:error:)], @"LocationHostApi api (%@) doesn't respond to @selector(requestLocationPermissionPermission:error:)", api);
+      [channel setMessageHandler:^(id _Nullable message, FlutterReply callback) {
+        NSArray *args = message;
+        PigeonLocationPermission arg_permission = [GetNullableObjectAtIndex(args, 0) integerValue];
+        FlutterError *error;
+        PigeonLocationPermissionData *output = [api requestLocationPermissionPermission:arg_permission error:&error];
+        callback(wrapResult(output, error));
       }];
     } else {
       [channel setMessageHandler:nil];
@@ -504,4 +572,12 @@ void LocationHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<L
       [channel setMessageHandler:nil];
     }
   }
+}
+NSObject<FlutterMessageCodec> *PermissionsHostApiGetCodec(void) {
+  static FlutterStandardMessageCodec *sSharedObject = nil;
+  sSharedObject = [FlutterStandardMessageCodec sharedInstance];
+  return sSharedObject;
+}
+
+void PermissionsHostApiSetup(id<FlutterBinaryMessenger> binaryMessenger, NSObject<PermissionsHostApi> *api) {
 }

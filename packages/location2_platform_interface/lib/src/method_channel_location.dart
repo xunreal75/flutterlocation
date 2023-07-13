@@ -29,6 +29,7 @@ class MethodChannelLocation extends LocationPlatform {
 
   /// Current opened stream of location
   Stream<LocationData>? _onLocationChanged;
+  Stream<LocationPermissionData>? _onLocationPermissionChanged;
 
   @override
   Stream<LocationData?> onLocationChanged({bool inBackground = false}) {
@@ -60,17 +61,6 @@ class MethodChannelLocation extends LocationPlatform {
     final permission = await _api.requestPermission();
     return permissionStatusFromInt(permission);
   }
-
-  /// Current opened stream of provider
-  Stream<PermissionStatus>? _onProviderChanged;
-
-  @override
-  Stream<PermissionStatus?> onProviderChanged() {
-    return _onProviderChanged ??=
-        _eventChannel.receiveBroadcastStream().map<PermissionStatus>(
-              (dynamic event) => event as PermissionStatus);
-  }
-
 
   @override
   Future<bool?> isGPSEnabled() {
@@ -115,6 +105,31 @@ class MethodChannelLocation extends LocationPlatform {
 
   @override
   Future<bool> openLocationSettings() {
-   return _api.openLocationSettings();
+    return _api.openLocationSettings();
+  }
+
+  @override
+  Future<LocationPermissionData?> getLocationPermissionStatus() async {
+    final res = await _api.getLocationPermissionStatus();
+    return LocationPermissionData.fromPigeon(res);
+  }
+
+  @override
+  Future<LocationPermissionData?> requestLocationPermission(
+    LocationPermission locationPermission,
+  ) async {
+    final val =
+        await _api.requestLocationPermission(locationPermission.toPigeon());
+    return LocationPermissionData.fromPigeon(val);
+  }
+
+  @override
+  Stream<LocationPermissionData?> onLocationPermissionChanged() {
+    return _onLocationPermissionChanged ??=
+        _eventChannel.receiveBroadcastStream().map<LocationPermissionData>(
+              (dynamic event) => LocationPermissionData.fromPigeon(
+                PigeonLocationPermissionData.decode(event as Object),
+              ),
+            );
   }
 }

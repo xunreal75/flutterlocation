@@ -15,6 +15,7 @@ class StreamHandler: NSObject, FlutterStreamHandler {
     var events: FlutterEventSink?
     
     public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
+        LocationServicesStatusWatcher.
         if !CLLocationManager.locationServicesEnabled() {
             UIApplication.shared.open(URL(string:UIApplication.openSettingsURLString)!)
             return FlutterError(code: "LOCATION2_SERVICE_DISABLED",
@@ -30,6 +31,8 @@ class StreamHandler: NSObject, FlutterStreamHandler {
         
         return nil
     }
+    
+    
     
     public func onCancel(withArguments arguments: Any?) -> FlutterError? {
         locationRequest?.cancelRequest()
@@ -74,8 +77,8 @@ class StreamHandler: NSObject, FlutterStreamHandler {
                     newLoc.altitude ?? NSNull(),
                     newLoc.bearing ?? NSNull(),
                     newLoc.bearingAccuracyDegrees ?? NSNull(),
-                    newLoc.elaspedRealTimeNanos ?? NSNull(),
-                    newLoc.elaspedRealTimeUncertaintyNanos ?? NSNull(),
+                    newLoc.elapsedRealTimeNanos ?? NSNull(),
+                    newLoc.elapsedRealTimeUncertaintyNanos ?? NSNull(),
                     newLoc.satellites ?? NSNull(),
                     newLoc.speed ?? NSNull(),
                     newLoc.speedAccuracy ?? NSNull(),

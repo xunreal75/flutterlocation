@@ -157,7 +157,7 @@ class LocationPlugin : FlutterPlugin, ActivityAware, LocationListener,
                 .setAccuracy(location.accuracy.toDouble())
                 .setAltitude(location.altitude)
                 .setBearing(location.bearing.toDouble())
-                .setElaspedRealTimeNanos(location.elapsedRealtimeNanos.toDouble())
+                .setelapsedRealTimeNanos(location.elapsedRealtimeNanos.toDouble())
                 .setIsMock(location.isFromMockProvider)
                 //.setSatellites(location.extras.getInt("satellites").toLong())
                 .setSpeed(location.speed.toDouble())
@@ -170,7 +170,7 @@ class LocationPlugin : FlutterPlugin, ActivityAware, LocationListener,
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            locationBuilder.setElaspedRealTimeUncertaintyNanos(location.elapsedRealtimeUncertaintyNanos)
+            locationBuilder.setelapsedRealTimeUncertaintyNanos(location.elapsedRealtimeUncertaintyNanos)
         }
 
         locationBuilder.setTime(System.currentTimeMillis().toDouble())
@@ -239,7 +239,7 @@ class LocationPlugin : FlutterPlugin, ActivityAware, LocationListener,
 
     override fun onProviderEnabled(provider: String?) {
         Log.d("Location", "onProviderEnabled")
-        ///TODO add listener
+        eventSink?.
     }
 
     override fun onProviderDisabled(provider: String?) {

@@ -8,7 +8,9 @@ import 'package:location2_platform_interface/src/messages.pigeon.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 part 'src/mapper.dart';
+
 part 'src/method_channel_location.dart';
+
 part 'src/types.dart';
 
 /// The interface that implementations of location must implement.
@@ -53,8 +55,17 @@ abstract class LocationPlatform extends PlatformInterface {
   /// Request location permission for the app
   Future<PermissionStatus?> requestPermission();
 
-  /// Return a stream if permissions changed.
-  Stream<PermissionStatus?> onProviderChanged();
+  /// Return a stream of the user's location.
+  Stream<LocationPermissionData?> onLocationPermissionChanged();
+
+  /// Get the permission status of the app
+  Future<LocationPermissionData?> getLocationPermissionStatus();
+
+  /// Request location permission for the app
+  /// [LocationPermissionData]
+  Future<LocationPermissionData?> requestLocationPermission(
+      LocationPermission locationPermission,
+  );
 
   /// Return true if GPS is enabled on the device
   Future<bool?> isGPSEnabled();
@@ -82,6 +93,4 @@ abstract class LocationPlatform extends PlatformInterface {
   /// Returns true if the location settings page could be opened, otherwise
   /// or false if not.
   Future<bool> openLocationSettings();
-
-
 }

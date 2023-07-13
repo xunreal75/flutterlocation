@@ -88,4 +88,24 @@ class LocationLinux extends LocationPlatform {
     throw UnimplementedError();
   }
 
+  @override
+  Future<LocationPermissionData?> getLocationPermissionStatus() {
+    // TODO: implement getLocationPermissionStatus
+    throw UnimplementedError();
+  }
+
+  @override
+  Stream<LocationPermissionData?> onLocationPermissionChanged() {
+    // TODO: implement onLocationPermissionChanged
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<LocationPermissionData?> requestLocationPermission(LocationPermission locationPermission) {
+    // TODO: implement requestLocationPermission
+    throw UnimplementedError();
+  }
+
+ 
+
 }
