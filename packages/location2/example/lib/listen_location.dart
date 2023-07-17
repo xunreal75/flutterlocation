@@ -14,9 +14,22 @@ class ListenLocationWidget extends StatefulWidget {
 class _ListenLocationWidgetState extends State<ListenLocationWidget> {
   LocationData? _location;
   StreamSubscription<LocationData>? _locationSubscription;
+  StreamSubscription<LocationPermissionData>? _locationPermissionSubscription;
   String? _error;
 
   bool _inBackground = false;
+
+  Future<void> _listenPermissionChanges() async {
+    _locationPermissionSubscription =
+        onLocationPermissionChanged().listen((event) {});
+  }
+
+  Future<void> _stopListenPermissionChanges() async {
+    await _locationPermissionSubscription?.cancel();
+    setState(() {
+      _locationPermissionSubscription = null;
+    });
+  }
 
   Future<void> _listenLocation() async {
     _locationSubscription = onLocationChanged(inBackground: _inBackground)
@@ -37,9 +50,9 @@ class _ListenLocationWidgetState extends State<ListenLocationWidget> {
         _location = currentLocation;
       });
       await updateBackgroundNotification(
-        subtitle:
-            'Location: ${currentLocation.latitude}, ${currentLocation.longitude}',
         onTapBringToFront: true,
+        subtitle: 'Location: ${currentLocation.latitude}, '
+            '${currentLocation.longitude}',
       );
     });
     setState(() {});
@@ -47,9 +60,11 @@ class _ListenLocationWidgetState extends State<ListenLocationWidget> {
 
   Future<void> _stopListen() async {
     await _locationSubscription?.cancel();
+
     setState(() {
       _locationSubscription = null;
     });
+    _stopListenPermissionChanges();
   }
 
   @override

@@ -11,6 +11,8 @@ part 'src/mapper.dart';
 
 part 'src/method_channel_location.dart';
 
+part 'src/method_channel_location_permission.dart';
+
 part 'src/types.dart';
 
 /// The interface that implementations of location must implement.
@@ -46,6 +48,7 @@ abstract class LocationPlatform extends PlatformInterface {
   /// Return a stream of the user's location.
   Stream<LocationData?> onLocationChanged({bool inBackground = false});
 
+
   /// Set new global location settings for the app
   Future<bool?> setLocationSettings(LocationSettings settings);
 
@@ -54,18 +57,6 @@ abstract class LocationPlatform extends PlatformInterface {
 
   /// Request location permission for the app
   Future<PermissionStatus?> requestPermission();
-
-  /// Return a stream of the user's location.
-  Stream<LocationPermissionData?> onLocationPermissionChanged();
-
-  /// Get the permission status of the app
-  Future<LocationPermissionData?> getLocationPermissionStatus();
-
-  /// Request location permission for the app
-  /// [LocationPermissionData]
-  Future<LocationPermissionData?> requestLocationPermission(
-      LocationPermission locationPermission,
-  );
 
   /// Return true if GPS is enabled on the device
   Future<bool?> isGPSEnabled();
@@ -93,4 +84,47 @@ abstract class LocationPlatform extends PlatformInterface {
   /// Returns true if the location settings page could be opened, otherwise
   /// or false if not.
   Future<bool> openLocationSettings();
+}
+
+/// The interface that implementations of location_permission must implement.
+///
+/// Platform implementations should extend this class
+/// rather than implement it as `Location`.
+/// Extending this class (using `extends`) ensures that the subclass will get
+/// the default implementation, while platform implementations that `implements`
+///  this interface will be broken by newly added [LocationPermissionPlatform] methods.
+abstract class LocationPermissionPlatform extends PlatformInterface {
+  /// Constructs a LocationPlatform.
+  LocationPermissionPlatform() : super(token: _token);
+
+  static final Object _token = Object();
+
+  static LocationPermissionPlatform _instance =
+      MethodChannelLocationPermission();
+
+  /// Platform-specific plugins should set this with their own platform-specific
+  /// class that extends [LocationPermissionPlatform] when they  themselves.
+  static set instance(LocationPermissionPlatform instance) {
+    PlatformInterface.verify(instance, _token);
+    _instance = instance;
+  }
+
+  /// The default instance of [LocationPlatform] to use.
+  ///
+  /// Defaults to [MethodChannelLocation].
+  static LocationPermissionPlatform get instance => _instance;
+
+  /// Return a stream of the user's locationPermission.
+  Stream<LocationPermissionData?> onLocationPermissionChanged();
+
+  /// Get the permission status of the app
+  Future<LocationPermissionData?> getLocationPermissionStatus();
+
+  /// Request location permission for the app
+  /// [LocationPermissionData]
+  Future<LocationPermissionData?> requestLocationPermission(
+      LocationPermission locationPermission,
+      );
+
+
 }

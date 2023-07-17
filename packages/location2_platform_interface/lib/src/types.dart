@@ -21,6 +21,7 @@ class LocationData {
     this.bearingAccuracyDegrees,
     this.elapsedRealTimeNanos,
     this.elapsedRealTimeUncertaintyNanos,
+    @Deprecated('unused during newer location responses')
     this.satellites,
     this.speed,
     this.speedAccuracy,
@@ -90,7 +91,7 @@ class LocationData {
   final double? bearingAccuracyDegrees;
 
   /// timestamp of the LocationData
-  final double? time;
+  final int? time;
 
   /// Is the location currently mocked
   ///
@@ -162,23 +163,27 @@ extension LocationAccuracyExtension on LocationAccuracy {
 /// {@endtemplate}
 class LocationPermissionData {
   /// {@macro locationPermissionData}
-  LocationPermissionData({this.locationPermission});
+  LocationPermissionData({
+    this.locationPermissionId,
+  });
 
   /// Constructor from a Pigeon LocationPermissionData.
   factory LocationPermissionData.fromPigeon(
-      PigeonLocationPermissionData pigeonData) {
+    PigeonLocationPermissionData pigeonData,
+  ) {
     if (pigeonData.pigeonLocationPermission == null) {
       return LocationPermissionData(
-          locationPermission: LocationPermission.notDetermined);
+        locationPermissionId: 0,
+      );
     }
 
     return LocationPermissionData(
-        locationPermission: LocationPermission
-            .values[pigeonData.pigeonLocationPermission!.index]);
+      locationPermissionId: pigeonData.pigeonLocationPermission,
+    );
   }
 
   ///Type of location permission -- see [LocationPermission]
-  LocationPermission? locationPermission;
+  int? locationPermissionId;
 }
 
 /// Status of a granted permission or requested to use location services.
@@ -202,6 +207,13 @@ enum LocationPermission {
   /// User has granted authorization to use their location only while
   /// they are using your app.
   authorizedWhenInUse,
+
+  ///Any authorisation is available , accuracy might be increased
+  ///normally always on older OS
+  authorized,
+
+  /// Unknown state of location
+  unknown,
 }
 
 /// Extended to [LocationPermission].
@@ -219,7 +231,15 @@ extension LocationPermissionExtension on LocationPermission {
         return PigeonLocationPermission.authorizedAlways;
       case LocationPermission.authorizedWhenInUse:
         return PigeonLocationPermission.authorizedWhenInUse;
+      case LocationPermission.authorized:
+        return PigeonLocationPermission.authorizedAlways;
+      case LocationPermission.unknown:
+        return PigeonLocationPermission.unknown;
     }
+  }
+
+  LocationPermission fromInt() {
+    return locationPermissionStatusFromInt(index);
   }
 }
 

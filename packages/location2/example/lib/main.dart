@@ -6,6 +6,8 @@ import 'package:location2_example/listen_location.dart';
 import 'package:location2_example/permission_status.dart';
 import 'package:location2_example/service_enabled.dart';
 
+import 'listen_location_permission.dart';
+
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
@@ -34,11 +36,13 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text(title!),
       ),
-      body: SingleChildScrollView(
+      body:  const SingleChildScrollView(
         child: Column(
-          children: const <Widget>[
+          children: <Widget>[
             SizedBox(height: 16),
             PermissionStatusWidget(),
+            Divider(height: 32),
+            ListenLocationPermissionWidget(),
             Divider(height: 32),
             ServiceEnabledWidget(),
             Divider(height: 32),
@@ -48,7 +52,8 @@ class MyHomePage extends StatelessWidget {
             Divider(height: 32),
             ChangeSettings(),
             Divider(height: 32),
-            ChangeNotificationWidget()
+            ChangeNotificationWidget(),
+
           ],
         ),
       ),

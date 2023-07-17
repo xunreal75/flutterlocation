@@ -100,7 +100,8 @@ class LocationWindows extends LocationPlatform {
   }
 
   @override
-  Future<LocationPermissionData?> requestLocationPermission(LocationPermission locationPermission) {
+  Future<LocationPermissionData?> requestLocationPermission(
+      LocationPermission locationPermission) {
     // TODO: implement requestLocationPermission
     throw UnimplementedError();
   }

@@ -5,14 +5,17 @@ export 'package:location2_platform_interface/location2_platform_interface.dart'
     show
         LocationAccuracy,
         LocationData,
-        LocationPermissionData,
         LocationPermission,
+        LocationPermissionData,
         LocationPlatform,
         LocationSettings,
         PermissionStatus,
         XPermissionStatus;
 
 LocationPlatform get _platform => LocationPlatform.instance;
+
+LocationPermissionPlatform get _locationPermissionPlatform =>
+    LocationPermissionPlatform.instance;
 
 /// Allows you to mock the [LocationPlatform] instance for testing.
 @visibleForTesting
@@ -156,9 +159,11 @@ Future<PermissionStatus> getPermissionStatus() async {
   return response;
 }
 
-@Deprecated('Use [requestLocationPermission] instead')
-
 /// Request location permission.
+@Deprecated('Use requestLocationPermission instead'
+    '```dart '
+    'var permissionStatus = getLocationPermissionStatus();'
+    '```')
 Future<PermissionStatus> requestPermission() async {
   final response = await _platform.requestPermission();
   if (response == null) {
@@ -169,7 +174,8 @@ Future<PermissionStatus> requestPermission() async {
 
 /// Get permission status.
 Future<LocationPermissionData> getLocationPermissionStatus() async {
-  final response = await _platform.getLocationPermissionStatus();
+  final response =
+      await _locationPermissionPlatform.getLocationPermissionStatus();
   if (response == null) {
     throw Exception('Error while getting permission status');
   }
@@ -177,22 +183,23 @@ Future<LocationPermissionData> getLocationPermissionStatus() async {
 }
 
 /// Request location permission.
-Future<LocationPermissionData> requestLocationPermission(
+Future<LocationPermission> requestLocationPermission(
   LocationPermission permission,
 ) async {
-  final response = await _platform.requestLocationPermission(permission);
+  final response =
+      await _locationPermissionPlatform.requestLocationPermission(permission);
   if (response == null) {
     throw Exception('Error while requesting LocationPermission');
   }
-  return response;
+  return locationPermissionStatusFromInt(response.locationPermissionId ?? 0);
 }
 
 /// Listen to the current location permissions.
-Stream<LocationPermission> onLocationPermissionChanged() {
-  return _platform
+Stream<LocationPermissionData> onLocationPermissionChanged() {
+  return _locationPermissionPlatform
       .onLocationPermissionChanged()
       .where((event) => event != null)
-      .cast<LocationPermission>();
+      .cast<LocationPermissionData>();
 }
 
 /// Returns true if the GPS provider is enabled

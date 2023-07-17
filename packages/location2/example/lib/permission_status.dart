@@ -10,7 +10,10 @@ class PermissionStatusWidget extends StatefulWidget {
 
 class _PermissionStatusWidgetState extends State<PermissionStatusWidget> {
   PermissionStatus _permissionGranted = PermissionStatus.notDetermined;
+  LocationPermission _locationPermissionGranted =
+      LocationPermission.notDetermined;
 
+  @Deprecated('in favor of _checkLocationPermission')
   Future<void> _checkPermissions() async {
     final permissionGrantedResult = await getPermissionStatus();
     setState(() {
@@ -18,10 +21,33 @@ class _PermissionStatusWidgetState extends State<PermissionStatusWidget> {
     });
   }
 
+  @Deprecated('in favor of _requestLocationPermission')
   Future<void> _requestPermission() async {
     final permissionRequestedResult = await requestPermission();
     setState(() {
       _permissionGranted = permissionRequestedResult;
+    });
+  }
+
+  Future<void> _requestLocationPermission(LocationPermission permission) async {
+    final permissionRequestedResult = await requestLocationPermission(
+      permission,
+    );
+    setState(() {
+      _locationPermissionGranted=permissionRequestedResult;
+    });
+  }
+
+  Future<void> _checkLocationPermission() async {
+    final permissionRequestedResult = await getLocationPermissionStatus();
+
+    setState(() {
+      if (permissionRequestedResult.locationPermissionId != null) {
+        //_locationPermissionGranted =
+          //  permissionRequestedResult.locationPermission!;
+      } else {
+        _locationPermissionGranted = LocationPermission.notDetermined;
+      }
     });
   }
 
@@ -33,7 +59,7 @@ class _PermissionStatusWidgetState extends State<PermissionStatusWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            'Permission status: $_permissionGranted',
+            'Permission request result : $_locationPermissionGranted',
             style: Theme.of(context).textTheme.bodyLarge,
           ),
           Row(
@@ -41,17 +67,42 @@ class _PermissionStatusWidgetState extends State<PermissionStatusWidget> {
               Container(
                 margin: const EdgeInsets.only(right: 42),
                 child: ElevatedButton(
-                  onPressed: _checkPermissions,
-                  child: const Text('Check'),
+                  onPressed: _checkLocationPermission,
+                  child: const Text('Check Location Permission'),
                 ),
               ),
-              ElevatedButton(
-                onPressed:
-                    _permissionGranted.authorized ? null : _requestPermission,
-                child: const Text('Request'),
-              )
             ],
-          )
+          ),
+          Row(
+            children: <Widget>[
+              Container(
+                margin: const EdgeInsets.only(right: 42),
+                child: ElevatedButton(
+                  onPressed: () {
+                    _requestLocationPermission(
+                      LocationPermission.authorizedAlways,
+                    );
+                  },
+                  child: const Text('Request always'),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              Container(
+                margin: const EdgeInsets.only(right: 42),
+                child: ElevatedButton(
+                  onPressed: () {
+                    _requestLocationPermission(
+                      LocationPermission.authorizedWhenInUse,
+                    );
+                  },
+                  child: const Text('Request WhenInUse'),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );

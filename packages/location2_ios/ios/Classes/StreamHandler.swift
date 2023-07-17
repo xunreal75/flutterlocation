@@ -9,13 +9,35 @@ import Foundation
 import SwiftLocation
 import CoreLocation
 
-class StreamHandler: NSObject, FlutterStreamHandler {
+class StreamHandler: NSObject, FlutterStreamHandler,CLLocationManagerDelegate {
     var locationRequest: GPSLocationRequest?
     var locationSettings: PigeonLocationSettings?
     var events: FlutterEventSink?
+    private let locationManager: CLLocationManager
+    private var authorizationStatus:CLAuthorizationStatus
+    
+    override init() {
+        self.locationManager = CLLocationManager()
+        self.authorizationStatus = .notDetermined
+        super.init()
+        self.locationManager.delegate = self
+    }
+    
+    @available(iOS, introduced: 4.2, deprecated: 14.0)
+    public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        checkLocationServicesStatusChange()
+    }
+    
+    @available(iOS 14.0, *)
+    public func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        checkLocationServicesStatusChange()
+    }
+    
+    func checkLocationServicesStatusChange() {
+        self.authorizationStatus = SwiftLocation.authorizationStatus
+    }
     
     public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
-        LocationServicesStatusWatcher.
         if !CLLocationManager.locationServicesEnabled() {
             UIApplication.shared.open(URL(string:UIApplication.openSettingsURLString)!)
             return FlutterError(code: "LOCATION2_SERVICE_DISABLED",
@@ -23,9 +45,21 @@ class StreamHandler: NSObject, FlutterStreamHandler {
                                 details: nil)
         }
         
+       /* if authorizationStatus != .authorizedAlways ||
+            authorizationStatus != .authorizedWhenInUse
+        {
+            UIApplication.shared.open(URL(string:UIApplication.openSettingsURLString)!)
+            return FlutterError(code: "LOCATION2_SERVICE_DISABLED",
+                                message: "The user have deactivated the location service, the settings page has been opened",
+                                details: nil)
+            
+        }*/
         let activated = arguments as! Bool? ?? false
         SwiftLocation.allowsBackgroundLocationUpdates = activated
-
+        if #available(iOS 11.0, *) {
+          // Running iOS 11 OR NEWER
+        locationManager.showsBackgroundLocationIndicator = activated
+        }
         self.events = events
         startListening()
         
@@ -51,7 +85,7 @@ class StreamHandler: NSObject, FlutterStreamHandler {
             return
         }
 
-        let options = SwiftLocationPlugin.locationSettingsToGPSLocationOptions(locationSettings)
+        let options = LocationMethods.locationSettingsToGPSLocationOptions(locationSettings)
         options?.subscription = .continous
         
         
@@ -66,8 +100,8 @@ class StreamHandler: NSObject, FlutterStreamHandler {
         locationRequest?.then { result in
             switch result {
             case .success(let newData):
-                print("New location: \(newData)")
-                let newLoc = SwiftLocationPlugin.locationToData(newData)
+                print("New location: \(newData) received")
+                let newLoc = LocationMethods.locationToData(newData)
                 //Workaround for missing to List Method implementation from Pigeon
                 let newLocList  =
                 [

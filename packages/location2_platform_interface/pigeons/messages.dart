@@ -28,13 +28,13 @@ class PigeonLocationData {
   int? satellites;
   double? speed;
   double? speedAccuracy;
-  double? time;
+  int? time;
   double? verticalAccuracy;
   bool? isMock;
 }
 
 class PigeonLocationPermissionData {
-  PigeonLocationPermission? pigeonLocationPermission;
+  int? pigeonLocationPermission;
 }
 
 enum PigeonLocationPermission {
@@ -43,6 +43,8 @@ enum PigeonLocationPermission {
   denied,
   authorizedAlways,
   authorizedWhenInUse,
+  authorized,
+  unknown,
 }
 
 class PigeonNotificationSettings {
@@ -110,13 +112,8 @@ abstract class LocationHostApi {
 
   int getPermissionStatus();
 
+  @async
   int requestPermission();
-
-  PigeonLocationPermissionData getLocationPermissionStatus();
-
-  PigeonLocationPermissionData requestLocationPermission(
-    PigeonLocationPermission permission,
-  );
 
   bool isGPSEnabled();
 
@@ -126,10 +123,20 @@ abstract class LocationHostApi {
 
   bool setBackgroundActivated(bool activated);
 
+  @async
   bool openLocationSettings();
 
+  @async
   bool openAppSettings();
 }
 
 @HostApi()
-abstract class PermissionsHostApi {}
+abstract class LocationPermissionsHostApi {
+
+  PigeonLocationPermissionData getLocationPermissionStatus();
+
+  @async
+  PigeonLocationPermissionData requestLocationPermission(
+      PigeonLocationPermission permission,
+      );
+}

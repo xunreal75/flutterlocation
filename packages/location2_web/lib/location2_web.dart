@@ -91,7 +91,7 @@ class LocationWeb extends LocationPlatform {
       speed: result.coords?.speed?.toDouble(),
       accuracy: result.coords?.accuracy?.toDouble(),
       verticalAccuracy: result.coords?.altitudeAccuracy?.toDouble(),
-      time: result.timestamp?.toDouble(),
+      time: result.timestamp,
     );
   }
 
@@ -137,7 +137,8 @@ class LocationWeb extends LocationPlatform {
   }
 
   @override
-  Future<LocationPermissionData?> requestLocationPermission(LocationPermission locationPermission) {
+  Future<LocationPermissionData?> requestLocationPermission(
+      LocationPermission locationPermission) {
     // TODO: implement requestLocationPermission
     throw UnimplementedError();
   }

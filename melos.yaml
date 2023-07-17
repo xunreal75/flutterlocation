@@ -5,14 +5,13 @@ packages:
 
 scripts:
   generate:pigeon:
-    run: melos exec -- "flutter pub run pigeon --input ./pigeons/messages.dart"
-    select-package:
-      file-exists: "./pigeons/messages.dart"
-
+    run: melos exec -- "dart run pigeon --input ./pigeons/messages.dart"
+    packageFilters:
+      fileExists: "./pigeons/messages.dart"
   test:
     run: melos exec -- "flutter test"
     select-package:
-      dir-exists: "test"
+      dir-exists: test
 
   format:
     run: melos exec -- dart format -o write .

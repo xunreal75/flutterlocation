@@ -503,6 +503,17 @@ class LocationPlugin : FlutterPlugin, ActivityAware, LocationListener,
         }
     }
 
+    override fun getLocationPermissionStatus(): GeneratedAndroidLocation.PigeonLocationPermissionData {
+        TODO("Not yet implemented")
+    }
+
+    override fun requestLocationPermission(
+        permission: GeneratedAndroidLocation.PigeonLocationPermission,
+        result: GeneratedAndroidLocation.Result<GeneratedAndroidLocation.PigeonLocationPermissionData>
+    ) {
+        TODO("Not yet implemented")
+    }
+
     override fun isGPSEnabled(): Boolean {
         val locationProvider = DefaultLocationProvider()
         val contextProcessor = ContextProcessor(activity?.application)
@@ -540,6 +551,14 @@ class LocationPlugin : FlutterPlugin, ActivityAware, LocationListener,
         )
 
         return true
+    }
+
+    override fun openLocationSettings(result: GeneratedAndroidLocation.Result<Boolean>) {
+        TODO("Not yet implemented")
+    }
+
+    override fun openAppSettings(result: GeneratedAndroidLocation.Result<Boolean>) {
+        TODO("Not yet implemented")
     }
 
     override fun openLocationSettings(): Boolean {
