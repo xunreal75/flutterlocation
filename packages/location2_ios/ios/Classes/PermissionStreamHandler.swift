@@ -14,25 +14,24 @@ class PermissionStreamHandler: NSObject, FlutterStreamHandler,CLLocationManagerD
     var locationRequest: GPSLocationRequest?
     var locationSettings: PigeonLocationSettings?
     var events: FlutterEventSink?
-    var isListening:Bool
+    var authorizationStatus:CLAuthorizationStatus = .notDetermined
     private let locationManager = CLLocationManager()
-    private var authorizationStatus:CLAuthorizationStatus = .notDetermined
+    
 
     
     override init() {
-        isListening = false
         super.init()
         self.locationManager.delegate = self
     }
     
     @available(iOS, introduced: 4.2, deprecated: 14.0)
     public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        checkLocationServicesStatusChange()
+        setAuthorizationStatus(status)
     }
     
     @available(iOS 14.0, *)
     public func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        checkLocationServicesStatusChange()
+        setAuthorizationStatus(manager.authorizationStatus)
     }
     
     func locationManager(_: CLLocationManager, didFailWithError error : Error){
@@ -45,28 +44,28 @@ class PermissionStreamHandler: NSObject, FlutterStreamHandler,CLLocationManagerD
          
     }
     
-    
-    func checkLocationServicesStatusChange() {
-        self.authorizationStatus = SwiftLocation.authorizationStatus
-        if ( self.events != nil && isListening == true){
-            
+    //Push  status to flutter
+    func setAuthorizationStatus(_ authorizationStatus:  CLAuthorizationStatus ) {
+        self.authorizationStatus = authorizationStatus
+        if (self.events != nil){
+            let newLocPermission = LocationPermissionMethods.locationPermissionToData(authorizationStatus)
+            let newLocList  =
+            [
+                newLocPermission.pigeonLocationPermission,
+            ]
+            self.events!(newLocList)
         }
     }
     
     public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
-        
         self.events = events
         startListening()
-        
         return nil
     }
-    
-    
     
     public func onCancel(withArguments arguments: Any?) -> FlutterError? {
         locationRequest?.cancelRequest()
         events = nil
-        isListening = false
         return nil
     }
     
@@ -75,12 +74,8 @@ class PermissionStreamHandler: NSObject, FlutterStreamHandler,CLLocationManagerD
             return
         }
         
-        isListening = true;
-        
-      
         if self.events != nil{
             let newLocPermission = LocationPermissionMethods.locationPermissionToData(authorizationStatus)
-            //Workaround for missing to List Method implementation from Pigeon
             let newLocList  =
             [
                 newLocPermission.pigeonLocationPermission,

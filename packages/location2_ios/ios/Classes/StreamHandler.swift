@@ -13,11 +13,10 @@ class StreamHandler: NSObject, FlutterStreamHandler,CLLocationManagerDelegate {
     var locationRequest: GPSLocationRequest?
     var locationSettings: PigeonLocationSettings?
     var events: FlutterEventSink?
-    private let locationManager: CLLocationManager
+    private let locationManager: CLLocationManager = CLLocationManager()
     private var authorizationStatus:CLAuthorizationStatus
     
     override init() {
-        self.locationManager = CLLocationManager()
         self.authorizationStatus = .notDetermined
         super.init()
         self.locationManager.delegate = self
@@ -25,40 +24,46 @@ class StreamHandler: NSObject, FlutterStreamHandler,CLLocationManagerDelegate {
     
     @available(iOS, introduced: 4.2, deprecated: 14.0)
     public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        checkLocationServicesStatusChange()
+        authorizationStatus = status
     }
     
     @available(iOS 14.0, *)
     public func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        checkLocationServicesStatusChange()
+        authorizationStatus=manager.authorizationStatus
+        print("StreamHandler Authorisation is set to: \(self.authorizationStatus.description)")
     }
     
-    func checkLocationServicesStatusChange() {
-        self.authorizationStatus = SwiftLocation.authorizationStatus
+    func locationManager(_: CLLocationManager, didFailWithError error : Error){
+        if self.events != nil{
+            let err = CLError.Code(rawValue: (error as NSError).code)!
+            self.events!(FlutterError(code: "LOCATION2_LOCATION_ERROR",
+                                      message: "locationManager did fail with error: \(err)",
+                                      details: nil))
+        }
+         
     }
     
     public func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
-        if !CLLocationManager.locationServicesEnabled() {
-            UIApplication.shared.open(URL(string:UIApplication.openSettingsURLString)!)
+        if authorizationStatus == .denied {
+            //UIApplication.shared.open(URL(string:UIApplication.openSettingsURLString)!)
             return FlutterError(code: "LOCATION2_SERVICE_DISABLED",
                                 message: "The user have deactivated the location service, the settings page has been opened",
                                 details: nil)
         }
         
-       /* if authorizationStatus != .authorizedAlways ||
-            authorizationStatus != .authorizedWhenInUse
-        {
-            UIApplication.shared.open(URL(string:UIApplication.openSettingsURLString)!)
-            return FlutterError(code: "LOCATION2_SERVICE_DISABLED",
-                                message: "The user have deactivated the location service, the settings page has been opened",
-                                details: nil)
-            
-        }*/
+         if authorizationStatus != .authorizedAlways ||
+         authorizationStatus != .authorizedWhenInUse
+         {
+         //UIApplication.shared.open(URL(string:UIApplication.openSettingsURLString)!)
+         return FlutterError(code: "LOCATION2_SERVICE",
+         message: "The user have deactivated the location service, the settings page has been opened",
+         details: nil)
+         }
         let activated = arguments as! Bool? ?? false
         SwiftLocation.allowsBackgroundLocationUpdates = activated
         if #available(iOS 11.0, *) {
-          // Running iOS 11 OR NEWER
-        locationManager.showsBackgroundLocationIndicator = activated
+            // Running iOS 11 OR NEWER
+            locationManager.showsBackgroundLocationIndicator = activated
         }
         self.events = events
         startListening()
@@ -84,7 +89,7 @@ class StreamHandler: NSObject, FlutterStreamHandler,CLLocationManagerDelegate {
         if (events == nil) {
             return
         }
-
+        
         let options = LocationMethods.locationSettingsToGPSLocationOptions(locationSettings)
         options?.subscription = .continous
         
@@ -124,20 +129,20 @@ class StreamHandler: NSObject, FlutterStreamHandler,CLLocationManagerDelegate {
                     self.events!(newLocList)
                 }
                 else{
-                //onCancel sets event to nil - Called if new loc in min interval
-                //avoid exception and app crash on nil events (FlutterSink?)
+                    //onCancel sets event to nil - Called if new loc in min interval
+                    //avoid exception and app crash on nil events (FlutterSink?)
                 }
                 
             case .failure(let error):
                 print("An error has occurred: \(error.localizedDescription)")
                 if self.events != nil{
                     self.events!(FlutterError(code: "LOCATION2_ERROR",
-                                    message: error.localizedDescription,
-                                    details: error.recoverySuggestion))
+                                              message: error.localizedDescription,
+                                              details: error.recoverySuggestion))
                 }
-
+                
             }
         }
-
+        
     }
 }

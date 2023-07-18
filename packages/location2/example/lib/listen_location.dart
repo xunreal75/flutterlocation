@@ -64,7 +64,7 @@ class _ListenLocationWidgetState extends State<ListenLocationWidget> {
     setState(() {
       _locationSubscription = null;
     });
-    _stopListenPermissionChanges();
+    await _stopListenPermissionChanges();
   }
 
   @override
