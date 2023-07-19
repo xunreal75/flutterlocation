@@ -32,6 +32,40 @@ Future<LocationData> getLocation({LocationSettings? settings}) async {
 }
 
 /// Listen to the current location.
+/// ```dart
+/// import 'package:location2/location2.dart';
+///
+/// Future<void> _listenLocation() async {
+///     _locationSubscription = onLocationChanged(inBackground: _inBackground)
+///         .handleError((dynamic err) {
+///       if (err is PlatformException) {
+///         setState(() {
+///           _error = err.code;
+///         });
+///       }
+///       _locationSubscription?.cancel();
+///       setState(() {
+///         _locationSubscription = null;
+///       });
+///     }).listen((LocationData currentLocation) async {
+///       setState(() {
+///         _error = null;
+///         _location = currentLocation;
+///       });
+///       //for Android
+///       await updateBackgroundNotification(
+///         onTapBringToFront: true,
+///         subtitle: 'Location: ${currentLocation.latitude}, '
+///             '${currentLocation.longitude}',
+///       );
+///     });
+///   }
+/// 
+///   Future<void> _stopListen() async {
+///     await _locationSubscription?.cancel();
+///     }
+/// ```
+///
 Stream<LocationData> onLocationChanged({bool inBackground = false}) {
   return _platform
       .onLocationChanged(inBackground: inBackground)
@@ -172,7 +206,16 @@ Future<PermissionStatus> requestPermission() async {
   return response;
 }
 
-/// Get permission status.
+/// Get current [LocationPermissionData]location permission status.
+/// ```dart
+///  final response =
+///  await _locationPermissionPlatform.getLocationPermissionStatus();
+///   if (response == null) {
+///     throw Exception('Error while getting permission status');
+///   }
+///   return response;
+/// ```
+///
 Future<LocationPermissionData> getLocationPermissionStatus() async {
   final response =
       await _locationPermissionPlatform.getLocationPermissionStatus();

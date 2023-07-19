@@ -51,6 +51,11 @@ class StreamHandler: NSObject, FlutterStreamHandler,CLLocationManagerDelegate {
                                 details: nil)
         }
         
+        if authorizationStatus == .notDetermined{
+            
+            
+        }
+        
          if authorizationStatus != .authorizedAlways ||
          authorizationStatus != .authorizedWhenInUse
          {

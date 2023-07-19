@@ -19,11 +19,6 @@ class _ListenLocationWidgetState extends State<ListenLocationWidget> {
 
   bool _inBackground = false;
 
-  Future<void> _listenPermissionChanges() async {
-    _locationPermissionSubscription =
-        onLocationPermissionChanged().listen((event) {});
-  }
-
   Future<void> _stopListenPermissionChanges() async {
     await _locationPermissionSubscription?.cancel();
     setState(() {

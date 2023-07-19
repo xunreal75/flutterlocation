@@ -3,10 +3,9 @@ import 'package:location2_example/change_notification.dart';
 import 'package:location2_example/change_settings.dart';
 import 'package:location2_example/get_location.dart';
 import 'package:location2_example/listen_location.dart';
+import 'package:location2_example/listen_location_permission.dart';
 import 'package:location2_example/permission_status.dart';
 import 'package:location2_example/service_enabled.dart';
-
-import 'listen_location_permission.dart';
 
 void main() => runApp(const MyApp());
 
@@ -21,7 +20,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.amber,
       ),
-      home: const MyHomePage(title: 'Flutter Location Demo'),
+      home: const MyHomePage(title: 'Flutter Location2 Demo'),
     );
   }
 }

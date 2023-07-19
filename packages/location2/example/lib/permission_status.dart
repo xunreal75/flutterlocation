@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:location2/location2.dart';
 
@@ -32,10 +33,19 @@ class _PermissionStatusWidgetState extends State<PermissionStatusWidget> {
   Future<void> _requestLocationPermission(LocationPermission permission) async {
     final permissionRequestedResult = await requestLocationPermission(
       permission,
-    );
-    setState(() {
-      _locationPermissionGranted=permissionRequestedResult;
+    ).catchError((dynamic error) {
+      //throws on invalid Parameters and 2nd request for always permission
+      if (kDebugMode) {
+        print(error);
+      }
+      return LocationPermission.unknown;
     });
+    setState(() {
+      _locationPermissionGranted = permissionRequestedResult;
+    });
+    if (_locationPermissionGranted==LocationPermission.unknown){
+      await _checkLocationPermission();
+    }
   }
 
   Future<void> _checkLocationPermission() async {
@@ -43,10 +53,10 @@ class _PermissionStatusWidgetState extends State<PermissionStatusWidget> {
 
     setState(() {
       if (permissionRequestedResult.locationPermissionId != null) {
-        //_locationPermissionGranted =
-          //  permissionRequestedResult.locationPermission!;
+        _locationPermissionGranted = LocationPermission
+            .values[permissionRequestedResult.locationPermissionId!];
       } else {
-        _locationPermissionGranted = LocationPermission.notDetermined;
+        _locationPermissionGranted = LocationPermission.unknown;
       }
     });
   }

@@ -113,11 +113,9 @@ class _ChangeSettingsState extends State<ChangeSettings> {
               child: const Text('Change'),
             ),
             const SizedBox(height: 4),
-            ElevatedButton(
-              onPressed: () {
-                openAppSettings();
-              },
-              child: const Text('Open app Settings'),
+            const ElevatedButton(
+              onPressed: openAppSettings,
+              child: Text('Open app Settings'),
             ),
             ElevatedButton(
               onPressed: () {
