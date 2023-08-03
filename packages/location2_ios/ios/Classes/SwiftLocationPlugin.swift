@@ -7,8 +7,8 @@ import Foundation
 @UIApplicationMain
 public class SwiftLocationPlugin: NSObject, FlutterPlugin, UIApplicationDelegate {
     var globalPigeonLocationSettings: PigeonLocationSettings?
-    var streamHandler: StreamHandler?
-    var permissionStreamHandler: PermissionStreamHandler?
+    var streamHandler: StreamHandlerLoc2?
+    var permissionStreamHandler: PermissionStreamHandlerLoc2?
     
     static let locationApi: LocationMethods = LocationMethods()
     static let locatinPermApi: LocationPermissionMethods = LocationPermissionMethods()
@@ -18,11 +18,11 @@ public class SwiftLocationPlugin: NSObject, FlutterPlugin, UIApplicationDelegate
         
         let locationPermissionEventChannel = FlutterEventChannel(name: "xunreal75/location2_permission_stream", binaryMessenger: messenger)
        
-        self.permissionStreamHandler = PermissionStreamHandler()
+        self.permissionStreamHandler = PermissionStreamHandlerLoc2()
         locationPermissionEventChannel.setStreamHandler(self.permissionStreamHandler)
             
         let eventChannel = FlutterEventChannel(name: "xunreal75/location2_stream", binaryMessenger: messenger)
-        self.streamHandler = StreamHandler()
+        self.streamHandler = StreamHandlerLoc2()
         eventChannel.setStreamHandler(self.streamHandler)
         
         registrar.addApplicationDelegate(self)

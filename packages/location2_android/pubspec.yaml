@@ -10,7 +10,7 @@ environment:
 
 flutter:
   plugin:
-    implements: location
+    implements: location2
     platforms:
       android:
         package: app.huth.location
@@ -24,6 +24,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  pigeon: ^10.1.0
+  pigeon: ^10.1.4
   plugin_platform_interface: ^2.1.4
   very_good_analysis: ^5.0.0+1

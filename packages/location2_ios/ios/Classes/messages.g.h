@@ -16,7 +16,7 @@ typedef NS_ENUM(NSUInteger, PigeonLocationPermission) {
   PigeonLocationPermissionDenied = 2,
   PigeonLocationPermissionAuthorizedAlways = 3,
   PigeonLocationPermissionAuthorizedWhenInUse = 4,
-  PigeonLocationPermissionAuthorized = 3,
+  PigeonLocationPermissionAuthorized = 5,
   PigeonLocationPermissionUnknown = 6,
 };
 

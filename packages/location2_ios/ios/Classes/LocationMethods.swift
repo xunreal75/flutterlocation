@@ -14,8 +14,8 @@ class LocationMethods: NSObject, LocationHostApi,CLLocationManagerDelegate {
     private var locationManager: CLLocationManager
     private var authorizationStatus:CLAuthorizationStatus
     var globalPigeonLocationSettings: PigeonLocationSettings?
-    var streamHandler: StreamHandler?
-    var permissionStreamHandler: PermissionStreamHandler?
+    var streamHandler: StreamHandlerLocation2?
+    var permissionStreamHandler: PermissionStreamHandlerLoc2?
     
     let TAG = "LocationHostApi"
     

@@ -10,7 +10,7 @@ import Foundation
 import SwiftLocation
 import CoreLocation
 
-class PermissionStreamHandler: NSObject, FlutterStreamHandler,CLLocationManagerDelegate {
+class PermissionStreamHandlerLoc2: NSObject, FlutterStreamHandler,CLLocationManagerDelegate {
     var locationRequest: GPSLocationRequest?
     var locationSettings: PigeonLocationSettings?
     var events: FlutterEventSink?

@@ -16,7 +16,7 @@ class LocationPermissionMethods: NSObject, LocationPermissionsHostApi,CLLocation
     private var authorizationStatus:CLAuthorizationStatus
     private var askForAlways:Bool
     var  requestLocationPermissionFunc : ((PigeonLocationPermissionData?, FlutterError?) -> Void)?
-    var permissionStreamHandler: PermissionStreamHandler?
+    var permissionStreamHandler: PermissionStreamHandlerLoc2?
     
     let TAG = "LocationPermissionsHostApi"
     

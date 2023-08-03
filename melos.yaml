@@ -1,4 +1,4 @@
-name: location
+name: location2
 
 packages:
   - packages/**
@@ -16,8 +16,17 @@ scripts:
   format:
     run: melos exec -- dart format -o write .
 
-  pubget:
+  pub-get:
     run: melos exec -- "flutter pub get"
+
+  pub-upgrade:
+    run: melos exec -- "flutter pub upgrade"
+
+  pub-upgrade-major:
+    run: melos exec -- "flutter pub upgrade --major-versions"
+
+  pub-outdated:
+    run: melos exec -- "flutter pub outdated"
 
   analyze:
     run: melos exec -- "flutter analyze"

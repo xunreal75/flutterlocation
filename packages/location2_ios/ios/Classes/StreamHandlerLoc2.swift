@@ -3,13 +3,13 @@
 //  location2_ios
 //
 //  Created by Guillaume Bernos on 10/06/2022.
-//
+//  Edited by Lhuth on 03/08/2023 because Streamhandler issue with 2nd package
 
 import Foundation
 import SwiftLocation
 import CoreLocation
 
-class StreamHandler: NSObject, FlutterStreamHandler,CLLocationManagerDelegate {
+class StreamHandlerLoc2: NSObject, FlutterStreamHandler,CLLocationManagerDelegate {
     var locationRequest: GPSLocationRequest?
     var locationSettings: PigeonLocationSettings?
     var events: FlutterEventSink?

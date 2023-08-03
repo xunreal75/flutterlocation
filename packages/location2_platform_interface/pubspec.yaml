@@ -1,7 +1,7 @@
 name: location2_platform_interface
 description: A common platform interface for the location plugin.
-homepage: https://docs.page/Xunreal75/flutterlocation
-repository: https://github.com/Xunreal75/flutterlocation
+homepage: https://docs.page/xunreal75/flutterlocation
+repository: https://github.com/xunreal75/flutterlocation
 version: 6.0.1
 
 environment:
@@ -16,5 +16,5 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  pigeon: ^10.1.3
+  pigeon: ^10.1.4
   very_good_analysis: ^5.0.0+1
