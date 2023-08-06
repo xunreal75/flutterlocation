@@ -14,7 +14,7 @@ class _PermissionStatusWidgetState extends State<PermissionStatusWidget> {
   LocationPermission _locationPermissionGranted =
       LocationPermission.notDetermined;
 
-  @Deprecated('in favor of _checkLocationPermission')
+  @Deprecated('Please use checkLocationPermission')
   Future<void> _checkPermissions() async {
     final permissionGrantedResult = await getPermissionStatus();
     setState(() {
@@ -22,7 +22,7 @@ class _PermissionStatusWidgetState extends State<PermissionStatusWidget> {
     });
   }
 
-  @Deprecated('in favor of _requestLocationPermission')
+  @Deprecated('Please use  requestLocationPermission')
   Future<void> _requestPermission() async {
     final permissionRequestedResult = await requestPermission();
     setState(() {

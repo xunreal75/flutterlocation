@@ -21,12 +21,14 @@ class _GetLocationWidgetState extends State<GetLocationWidget> {
       _loading = true;
     });
     try {
-      final _locationResult = await getLocation(
-        settings: LocationSettings(ignoreLastKnownPosition: true),
+      final locationResult = await getLocation(
+        settings: LocationSettings(
+          ignoreLastKnownPosition: true,
+        ),
       );
 
       setState(() {
-        _location = _locationResult;
+        _location = locationResult;
         _loading = false;
       });
     } on PlatformException catch (err) {

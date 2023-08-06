@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:location2/location2.dart';
@@ -27,30 +28,34 @@ class _ListenLocationWidgetState extends State<ListenLocationWidget> {
   }
 
   Future<void> _listenLocation() async {
-    _locationSubscription = onLocationChanged(inBackground: _inBackground)
-        .handleError((dynamic err) {
-      if (err is PlatformException) {
-        setState(() {
-          _error = err.code;
-        });
-      }
-      _locationSubscription?.cancel();
-      setState(() {
-        _locationSubscription = null;
-      });
-    }).listen((LocationData currentLocation) async {
-      setState(() {
-        _error = null;
+      _locationSubscription = onLocationChanged(inBackground: _inBackground)
+          .handleError((dynamic err) {
+        if (err is PlatformException) {
+          _locationSubscription?.cancel();
+          if (err.code =='LOCATION2_SERVICE_DISABLED'){
+            _locationSubscription?.cancel();
+            _locationSubscription = null;
+            _error = err.code;
+          }
+          setState(() {
 
-        _location = currentLocation;
+          });
+        }
+      })
+          .listen((LocationData currentLocation) async {
+        setState(() {
+          _error = null;
+
+          _location = currentLocation;
+        });
+        await updateBackgroundNotification(
+          onTapBringToFront: true,
+          subtitle: 'Location: ${currentLocation.latitude}, '
+              '${currentLocation.longitude}',
+        );
       });
-      await updateBackgroundNotification(
-        onTapBringToFront: true,
-        subtitle: 'Location: ${currentLocation.latitude}, '
-            '${currentLocation.longitude}',
-      );
-    });
-    setState(() {});
+      setState(() {});
+
   }
 
   Future<void> _stopListen() async {

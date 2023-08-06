@@ -59,8 +59,8 @@ class LocationPermissionMethods: NSObject, LocationPermissionsHostApi,CLLocation
             }
             
             if  (permission == PigeonLocationPermission.authorizedAlways && self.authorizationStatus == .notDetermined) {
-                self.locationManager.requestWhenInUseAuthorization();
                 self.requestLocationPermissionFunc = completion
+                self.locationManager.requestWhenInUseAuthorization();
                 self.askForAlways = true
                 return
             }

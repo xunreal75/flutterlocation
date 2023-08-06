@@ -11,11 +11,11 @@ import SwiftLocation
 import CoreLocation
 
 class PermissionStreamHandlerLoc2: NSObject, FlutterStreamHandler,CLLocationManagerDelegate {
+    var authorizationStatus:CLAuthorizationStatus = .notDetermined
     var locationRequest: GPSLocationRequest?
     var locationSettings: PigeonLocationSettings?
     var events: FlutterEventSink?
-    var authorizationStatus:CLAuthorizationStatus = .notDetermined
-    private let locationManager = CLLocationManager()
+    private let locationManager: CLLocationManager = CLLocationManager()
     
 
     
@@ -75,7 +75,7 @@ class PermissionStreamHandlerLoc2: NSObject, FlutterStreamHandler,CLLocationMana
         }
         
         if self.events != nil{
-            let newLocPermission = LocationPermissionMethods.locationPermissionToData(authorizationStatus)
+            let newLocPermission = LocationPermissionMethods.locationPermissionToData(self.authorizationStatus)
             let newLocList  =
             [
                 newLocPermission.pigeonLocationPermission,

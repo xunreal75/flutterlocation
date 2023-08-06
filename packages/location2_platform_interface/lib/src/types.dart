@@ -116,6 +116,16 @@ class LocationData {
   final int? satellites;
 }
 
+/// Value of raised exception
+enum LocationErrors{
+  /// no exception
+  none,
+  /// thrown if location service permanent disabled
+  locationServiceDisabledError,
+  /// thrown if get location failed
+  locationFailedError
+}
+
 /// Precision of the Location. A lower precision will provide a greater battery
 /// life.
 ///
@@ -296,7 +306,7 @@ class LocationSettings {
     this.expirationTime,
     this.fastestInterval = 500,
     this.interval = 1000,
-    this.maxWaitTime,
+    this.maxWaitTime =3000,
     this.numUpdates,
     this.acceptableAccuracy,
     this.accuracy = LocationAccuracy.high,

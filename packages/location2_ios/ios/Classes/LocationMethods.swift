@@ -11,21 +11,30 @@ import Foundation
 import SwiftLocation
 
 class LocationMethods: NSObject, LocationHostApi,CLLocationManagerDelegate {
-    private var locationManager: CLLocationManager
-    private var authorizationStatus:CLAuthorizationStatus
-    var globalPigeonLocationSettings: PigeonLocationSettings?
-    var streamHandler: StreamHandlerLocation2?
-    var permissionStreamHandler: PermissionStreamHandlerLoc2?
-    
+    private let locationManager: CLLocationManager = CLLocationManager()
+    var authorizationStatus:CLAuthorizationStatus = .notDetermined
+    var getLocationCompletion:  ((PigeonLocationData?, FlutterError?)->Void)?
+    var getLocationPermissionCompletion:((CLAuthorizationStatus)->Void)?
+    private static var locationManagerIsListening = false
+    static var globalPigeonLocationSettings: PigeonLocationSettings?
+    private static var lastKnownGPSLocation:CLLocation?
+
     let TAG = "LocationHostApi"
     
     override init() {
-        self.locationManager = CLLocationManager()
-        self.authorizationStatus = .notDetermined
         super.init()
         self.locationManager.delegate = self
-        
     }
+    
+    public static func locationManagerIsContinousListening( _ isListen:Bool){
+        LocationMethods.locationManagerIsListening = isListen
+    }
+    
+    
+    public static func setLastKnownPoint( _ lastKnownPoint:CLLocation){
+        LocationMethods.lastKnownGPSLocation = lastKnownPoint
+    }
+    
     
     public func openLocationSettings(completion: @escaping (NSNumber?, FlutterError?) -> Void) {
         if let url = URL(string: UIApplication.openSettingsURLString) {
@@ -61,36 +70,93 @@ class LocationMethods: NSObject, LocationHostApi,CLLocationManagerDelegate {
         return NSNumber(false)
     }
     
+    /// get location with settings --> func name passed by pigeon
     public func getLocationSettings(_ settings: PigeonLocationSettings?, completion: @escaping (PigeonLocationData?, FlutterError?) -> Void) {
-        /*if !CLLocationManager.locationServicesEnabled() {
-         UIApplication.shared.open(URL(string:UIApplication.openSettingsURLString)!)
-         return completion(nil, FlutterError(code: "LOCATION2_SERVICE_DISABLED",
-         message: "The user have deactivated the location service, the settings page has been opened",
-         details: nil))
-         }*/
-        
-        let currentSettings = LocationMethods.locationSettingsToGPSLocationOptions(settings ?? globalPigeonLocationSettings)
-        
-        if globalPigeonLocationSettings?.ignoreLastKnownPosition == false {
-            let lastKnownPosition = SwiftLocation.lastKnownGPSLocation
-            if (lastKnownPosition != nil) {
-                completion(LocationMethods.locationToData(lastKnownPosition!), nil)
-                return;
-            }
+        let currentSettings = LocationMethods.locationSettingsToGPSLocationOptions(settings ?? LocationMethods.globalPigeonLocationSettings)
+       
+        var ignoreLastKnownPosition = false
+        if (currentSettings != nil){
+            ignoreLastKnownPosition = ((LocationMethods.globalPigeonLocationSettings?.ignoreLastKnownPosition) != nil)
+        }
+        else{
+            locationManager.distanceFilter = .leastNormalMagnitude
+           // locationManager.accuracyAuthorization = .fullAccuracy
         }
         
-        SwiftLocation.gpsLocationWith(currentSettings ?? getDefaultGPSLocationOptions()).then { result in // you can attach one or more subscriptions via `then`.
-            switch result {
-            case .success(let location):
-                completion(LocationMethods.locationToData(location), nil)
-            case .failure(let error):
-                completion(nil, FlutterError(code: "LOCATION2_ERROR",
-                                             message: error.localizedDescription,
-                                             details: error.recoverySuggestion))
+        if ((LocationMethods.locationManagerIsListening == true || ignoreLastKnownPosition == false) &&
+            LocationMethods.lastKnownGPSLocation != nil) {
+            print("Get Location - is listening and has lastKnownPoint")
+                completion(LocationMethods.locationToData(LocationMethods.lastKnownGPSLocation!), nil)
+                return;
+        }
+        
+        getLocationCompletion = completion
+        let stat = self.authorizationStatus
+        let req = currentSettings?.avoidRequestAuthorization
+        
+        if (stat == .notDetermined && req == false){
+        
+               getLocationPermissionCompletion =
+                {  status  in
+                    debugPrint(status)
+                    if (status != .denied && status != .notDetermined){
+                        self.locationManager.startUpdatingLocation()}
+                    else{
+                        completion(nil, FlutterError(code: "LOCATION2_SERVICE_PERMISSION",
+                                              message: "Location permisssion not ok. Result is: \(status)",
+                                              details: nil))
+                    }
+                }
+                locationManager.requestWhenInUseAuthorization()
+            return;
+               
             }
+        else if (stat == .denied){
+                completion(nil, FlutterError(code: "LOCATION2_SERVICE_DENIED",
+                                      message: "Location service denied",
+                                      details: nil))
+                return
+                
+        }
+        //workaround for long waiting on first request
+        locationManager.startUpdatingLocation()
+    }
+    
+    public func requestLocationPermission(_ requestedStatus:CLAuthorizationStatus,completion: @escaping (CLAuthorizationStatus) -> Void) {
+        getLocationPermissionCompletion =
+         {  status  in
+             debugPrint(status)
+             completion(status)
+         }
+        if (requestedStatus == .authorizedWhenInUse){
+            locationManager.requestWhenInUseAuthorization()
+        }
+        else{
+            locationManager.requestAlwaysAuthorization()
         }
     }
     
+    static public func locationToDataObject(_ location: CLLocation)->[NSObject]{
+        let newLoc = LocationMethods.locationToData(location)
+        let newLocList =
+        [
+            newLoc.latitude ?? NSNull(),
+            newLoc.longitude ?? NSNull(),
+            newLoc.accuracy ?? NSNull(),
+            newLoc.altitude ?? NSNull(),
+            newLoc.bearing ?? NSNull(),
+            newLoc.bearingAccuracyDegrees ?? NSNull(),
+            newLoc.elapsedRealTimeNanos ?? NSNull(),
+            newLoc.elapsedRealTimeUncertaintyNanos ?? NSNull(),
+            newLoc.satellites ?? NSNull(),
+            newLoc.speed ?? NSNull(),
+            newLoc.speedAccuracy ?? NSNull(),
+            newLoc.time ?? NSNull(),
+            newLoc.verticalAccuracy ?? NSNull() ,
+            newLoc.isMock ?? NSNull()
+        ]
+        return newLocList
+    }
     
     static public func locationToData(_ location: CLLocation) -> PigeonLocationData {
         if #available(iOS 13.4, *) {
@@ -155,6 +221,7 @@ class LocationMethods: NSObject, LocationHostApi,CLLocationManagerDelegate {
     }
     
     
+   
     static public func locationSettingsToGPSLocationOptions(_ settings: PigeonLocationSettings?) -> GPSLocationOptions? {
         if (settings == nil) {
             return nil
@@ -191,8 +258,9 @@ class LocationMethods: NSObject, LocationHostApi,CLLocationManagerDelegate {
     }
     
     
+    
     public func setLocationSettingsSettings(_ settings: PigeonLocationSettings, error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> NSNumber? {
-        globalPigeonLocationSettings = settings;
+        LocationMethods.globalPigeonLocationSettings = settings;
         
         return NSNumber(true)
     }
@@ -215,6 +283,23 @@ class LocationMethods: NSObject, LocationHostApi,CLLocationManagerDelegate {
             return 3
         @unknown default:
             return 5
+        }
+    }
+    
+    static public func getCLLocationAccuracy(pAccuracy:PigeonLocationAccuracy ) -> CLLocationAccuracy {
+        switch pAccuracy {
+        case .navigation:
+            return kCLLocationAccuracyBestForNavigation
+        case .powerSave:
+            return kCLLocationAccuracyHundredMeters
+        case .low:
+            return kCLLocationAccuracyHundredMeters
+        case .balanced:
+           return kCLLocationAccuracyBest
+        case .high:
+            return kCLLocationAccuracyBest
+        @unknown default:
+            return kCLLocationAccuracyBestForNavigation
         }
     }
     
@@ -243,6 +328,19 @@ class LocationMethods: NSObject, LocationHostApi,CLLocationManagerDelegate {
         }
     }
     
+    @available(iOS, introduced: 4.2, deprecated: 14.0)
+    public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        self.authorizationStatus = status
+        getLocationPermissionCompletion?(status)
+    }
+    
+    @available(iOS 14.0, *)
+    public func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
+        self.authorizationStatus=manager.authorizationStatus
+        getLocationPermissionCompletion?(manager.authorizationStatus)
+        debugPrint("Locatiomanager authorisation is set to: \(self.authorizationStatus.description)")
+    }
+    
     
     public func isGPSEnabledWithError(_ error: AutoreleasingUnsafeMutablePointer<FlutterError?>) -> NSNumber? {
         if CLLocationManager.locationServicesEnabled() {
@@ -268,4 +366,26 @@ class LocationMethods: NSObject, LocationHostApi,CLLocationManagerDelegate {
         return NSNumber(true)
     }
     
+    func locationManager(_: CLLocationManager, didFailWithError error : Error){
+        let err = CLError.Code(rawValue: (error as NSError).code)!
+        if (getLocationCompletion != nil){
+            getLocationCompletion!(nil, FlutterError(code: "LOCATION2_LOCATION_ERROR",
+                                      message: "locationManager did fail with error: \(err)",
+                                      details: nil))
+            
+        }
+        getLocationCompletion = nil
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if (getLocationCompletion != nil){
+            if let location = locations.last {
+                self.locationManager.stopUpdatingLocation()
+                LocationMethods.lastKnownGPSLocation = location
+                getLocationCompletion!(LocationMethods.locationToData(location),nil)
+                
+            }
+            getLocationCompletion = nil
+        }
+    }
 }
