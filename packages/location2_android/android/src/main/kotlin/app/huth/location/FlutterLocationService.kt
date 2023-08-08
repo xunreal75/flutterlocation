@@ -8,7 +8,7 @@ import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
-import app.huth.location.location.LocationManager
+import app.huth.location.location.LocationManagerLoc2
 import app.huth.location.location.configuration.DefaultProviderConfiguration
 import app.huth.location.location.configuration.GooglePlayServicesConfiguration
 import app.huth.location.location.configuration.LocationConfiguration
@@ -34,7 +34,7 @@ class FlutterLocationService() : Service(),
 
     private var backgroundNotification: BackgroundNotification? = null
 
-    var locationManager: LocationManager? = null
+    var locationManagerLoc2: LocationManagerLoc2? = null
         private set
 
     // Store result until a permission check is resolved
@@ -67,8 +67,8 @@ class FlutterLocationService() : Service(),
     override fun onDestroy() {
         Log.d(TAG, "Destroying service.")
 
-        locationManager?.cancel()
-        locationManager = null
+        locationManagerLoc2?.cancel()
+        locationManagerLoc2 = null
         backgroundNotification = null
 
         super.onDestroy()
@@ -105,12 +105,12 @@ class FlutterLocationService() : Service(),
                     .useDefaultProviders(DefaultProviderConfiguration.Builder().build())
                     .build()
 
-            locationManager = LocationManager.Builder(applicationContext)
+            locationManagerLoc2 = LocationManagerLoc2.Builder(applicationContext)
                 .activity(activity) // Only required to ask permission and/or GoogleApi - SettingsApi
                 .configuration(locationConfiguration)
                 .build()
 
-            locationManager?.get()
+            locationManagerLoc2?.get()
 
 
             val notification = backgroundNotification!!.build()
@@ -124,7 +124,7 @@ class FlutterLocationService() : Service(),
         Log.d(TAG, "Stop service in foreground.")
         stopForeground(true)
 
-        locationManager?.cancel()
+        locationManagerLoc2?.cancel()
 
         isForeground = false
     }
@@ -141,7 +141,7 @@ class FlutterLocationService() : Service(),
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
         Log.d("Location", "onActivityResult")
-        locationManager?.onActivityResult(requestCode, resultCode, data)
+        locationManagerLoc2?.onActivityResult(requestCode, resultCode, data)
         return true
     }
 
@@ -150,7 +150,7 @@ class FlutterLocationService() : Service(),
         permissions: Array<out String>,
         grantResults: IntArray
     ): Boolean {
-        locationManager?.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        locationManagerLoc2?.onRequestPermissionsResult(requestCode, permissions, grantResults)
         return true
     }
 }

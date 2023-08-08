@@ -28,34 +28,30 @@ class _ListenLocationWidgetState extends State<ListenLocationWidget> {
   }
 
   Future<void> _listenLocation() async {
-      _locationSubscription = onLocationChanged(inBackground: _inBackground)
-          .handleError((dynamic err) {
-        if (err is PlatformException) {
+    _locationSubscription = onLocationChanged(inBackground: _inBackground)
+        .handleError((dynamic err) {
+      if (err is PlatformException) {
+        _locationSubscription?.cancel();
+        if (err.code == 'LOCATION2_SERVICE_DISABLED') {
           _locationSubscription?.cancel();
-          if (err.code =='LOCATION2_SERVICE_DISABLED'){
-            _locationSubscription?.cancel();
-            _locationSubscription = null;
-            _error = err.code;
-          }
-          setState(() {
-
-          });
+          _locationSubscription = null;
+          _error = err.code;
         }
-      })
-          .listen((LocationData currentLocation) async {
-        setState(() {
-          _error = null;
+        setState(() {});
+      }
+    }).listen((LocationData currentLocation) async {
+      setState(() {
+        _error = null;
 
-          _location = currentLocation;
-        });
-        await updateBackgroundNotification(
-          onTapBringToFront: true,
-          subtitle: 'Location: ${currentLocation.latitude}, '
-              '${currentLocation.longitude}',
-        );
+        _location = currentLocation;
       });
-      setState(() {});
-
+      await updateBackgroundNotification(
+        onTapBringToFront: true,
+        subtitle: 'Location: ${currentLocation.latitude}, '
+            '${currentLocation.longitude}',
+      );
+    });
+    setState(() {});
   }
 
   Future<void> _stopListen() async {

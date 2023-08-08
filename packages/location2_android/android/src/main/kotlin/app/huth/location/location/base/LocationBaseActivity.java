@@ -7,24 +7,24 @@ import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import app.huth.location.location.LocationManager;
+import app.huth.location.location.LocationManagerLoc2;
 import app.huth.location.location.configuration.LocationConfiguration;
 import app.huth.location.location.constants.ProcessType;
 import app.huth.location.location.listener.LocationListener;
 
 public abstract class LocationBaseActivity extends AppCompatActivity implements LocationListener {
 
-    private LocationManager locationManager;
+    private LocationManagerLoc2 locationManagerLoc2;
 
     public abstract LocationConfiguration getLocationConfiguration();
 
-    protected LocationManager getLocationManager() {
-        return locationManager;
+    protected LocationManagerLoc2 getLocationManager() {
+        return locationManagerLoc2;
     }
 
     protected void getLocation() {
-        if (locationManager != null) {
-            locationManager.get();
+        if (locationManagerLoc2 != null) {
+            locationManagerLoc2.get();
         } else {
             throw new IllegalStateException("locationManager is null. "
                   + "Make sure you call super.initialize before attempting to getLocation");
@@ -35,7 +35,7 @@ public abstract class LocationBaseActivity extends AppCompatActivity implements 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        locationManager = new LocationManager.Builder(getApplicationContext())
+        locationManagerLoc2 = new LocationManagerLoc2.Builder(getApplicationContext())
               .configuration(getLocationConfiguration())
               .activity(this)
               .notify(this)
@@ -45,14 +45,14 @@ public abstract class LocationBaseActivity extends AppCompatActivity implements 
     @CallSuper
     @Override
     protected void onDestroy() {
-        locationManager.onDestroy();
+        locationManagerLoc2.onDestroy();
         super.onDestroy();
     }
 
     @CallSuper
     @Override
     protected void onPause() {
-        locationManager.onPause();
+        locationManagerLoc2.onPause();
         super.onPause();
     }
 
@@ -60,21 +60,21 @@ public abstract class LocationBaseActivity extends AppCompatActivity implements 
     @Override
     protected void onResume() {
         super.onResume();
-        locationManager.onResume();
+        locationManagerLoc2.onResume();
     }
 
     @CallSuper
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        locationManager.onActivityResult(requestCode, resultCode, data);
+        locationManagerLoc2.onActivityResult(requestCode, resultCode, data);
     }
 
     @CallSuper
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        locationManager.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        locationManagerLoc2.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override

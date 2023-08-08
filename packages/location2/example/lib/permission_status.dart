@@ -43,7 +43,7 @@ class _PermissionStatusWidgetState extends State<PermissionStatusWidget> {
     setState(() {
       _locationPermissionGranted = permissionRequestedResult;
     });
-    if (_locationPermissionGranted==LocationPermission.unknown){
+    if (_locationPermissionGranted == LocationPermission.unknown) {
       await _checkLocationPermission();
     }
   }

@@ -11,23 +11,21 @@ import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.GnssStatus
+import android.location.Location
 import android.location.LocationManager
 import android.net.Uri
-import android.os.Looper
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.provider.Settings
-import android.provider.Settings.Secure.LOCATION_MODE
-import android.provider.Settings.Secure.LOCATION_MODE_OFF
-import android.provider.Settings.Secure.getInt
 import android.util.Log
-import androidx.core.app.ActivityCompat
-import androidx.core.location.LocationManagerCompat.isLocationEnabled
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import app.huth.location.FlutterLocationService.LocalBinder
+import app.huth.location.location.LocationManagerLoc2
 import app.huth.location.location.configuration.Configurations.defaultConfiguration
 import app.huth.location.location.configuration.DefaultProviderConfiguration
 import app.huth.location.location.configuration.Defaults.LOCATION_PERMISSIONS
@@ -43,6 +41,7 @@ import app.huth.location.location.listener.PermissionListener
 import app.huth.location.location.providers.locationprovider.DefaultLocationProvider
 import app.huth.location.location.providers.locationprovider.LocationProvider
 import app.huth.location.location.providers.permissionprovider.DefaultPermissionProvider
+import app.huth.location.location.providers.permissionprovider.LocationPermissionProvider
 import app.huth.location.location.providers.permissionprovider.PermissionProvider
 import app.huth.location.location.view.ContextProcessor
 import com.google.android.gms.location.LocationRequest
@@ -53,7 +52,7 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.EventChannel.StreamHandler
 import io.flutter.plugin.common.PluginRegistry
-import java.security.Permission
+
 
 //https://github.com/android/location-samples/tree/main/LocationUpdatesBackgroundKotlin
 class LocationPlugin : FlutterPlugin, ActivityAware, LocationListener,
@@ -66,15 +65,18 @@ class LocationPlugin : FlutterPlugin, ActivityAware, LocationListener,
 
     private var globalLocationConfigurationBuilder: LocationConfiguration.Builder =
         defaultConfiguration("The location is needed", "The GPS is needed")
-    private var locationManager: LocationManager? = null
-    private var streamLocationManager: LocationManager? = null
+    private var locationManagerLoc2: LocationManagerLoc2? = null
+
+    private var streamLocationManagerLoc2: LocationManagerLoc2? = null
     private var flutterLocationService: FlutterLocationService? = null
 
 
+    @RequiresApi(Build.VERSION_CODES.P)
+    private val locationPermissionHandler :LocationPermissionProvider? = null
     private var locationEventChannel: EventChannel? = null
     private var permissionEventChannel: EventChannel? = null
     private var locationEventSink: EventChannel.EventSink? = null
-
+    private var permissionEventSink: EventChannel.EventSink? = null
 
     private var resultsNeedingLocation: MutableList<GeneratedAndroidLocation.Result<GeneratedAndroidLocation.PigeonLocationData>?> =
         mutableListOf()
@@ -83,10 +85,12 @@ class LocationPlugin : FlutterPlugin, ActivityAware, LocationListener,
 
     private var alreadyRequestedPermission = false
 
-    override fun onAttachedToEngine( flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+    @RequiresApi(Build.VERSION_CODES.P)
+    override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         GeneratedAndroidLocation.LocationHostApi.setup(flutterPluginBinding.binaryMessenger, this)
+        GeneratedAndroidLocation.LocationPermissionsHostApi.setup(flutterPluginBinding.binaryMessenger,this)
         context = flutterPluginBinding.applicationContext
-        locationEventChannel = EventChannel(flutterPluginBinding.binaryMessenger, STREAM_CHANNEL_NAME)
+        locationEventChannel = EventChannel(flutterPluginBinding.binaryMessenger, LOCATION_STREAM_CHANNEL_NAME)
         locationEventChannel?.setStreamHandler(this)
 
         permissionEventChannel = EventChannel(flutterPluginBinding.binaryMessenger, PERMISSION_STREAM_CHANNEL_NAME)
@@ -94,8 +98,10 @@ class LocationPlugin : FlutterPlugin, ActivityAware, LocationListener,
     }
 
 
-    override fun onDetachedFromEngine( binding: FlutterPlugin.FlutterPluginBinding) {
-        GeneratedAndroidLocation.LocationHostApi.setup(binding.binaryMessenger, null)
+    override fun onDetachedFromEngine( flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+        GeneratedAndroidLocation.LocationHostApi.setup(flutterPluginBinding.binaryMessenger, null)
+        GeneratedAndroidLocation.LocationPermissionsHostApi.setup(flutterPluginBinding.binaryMessenger,null)
+
         context = null
         locationEventChannel = null
         permissionEventChannel = null
@@ -113,6 +119,7 @@ class LocationPlugin : FlutterPlugin, ActivityAware, LocationListener,
                 FlutterLocationService::class.java
             ), serviceConnection, Context.BIND_AUTO_CREATE
         )
+        registerReceiver()
     }
 
     override fun onDetachedFromActivity() {
@@ -121,6 +128,7 @@ class LocationPlugin : FlutterPlugin, ActivityAware, LocationListener,
         activityBinding?.removeRequestPermissionsResultListener(this)
         activityBinding?.activity?.unbindService(serviceConnection)
         activityBinding = null
+        unregisterReceiver()
     }
 
 
@@ -131,7 +139,6 @@ class LocationPlugin : FlutterPlugin, ActivityAware, LocationListener,
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
         this.onAttachedToActivity(binding)
     }
-
 
     private val serviceConnection: ServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName, service: IBinder) {
@@ -150,29 +157,24 @@ class LocationPlugin : FlutterPlugin, ActivityAware, LocationListener,
         override fun onReceive(context: Context, intent: Intent) = checkGpsAndReact()
     }
 
-    private fun checkGpsAndReact() = if (isLocationEnabled() as Boolean) {
+    private fun checkGpsAndReact() = if (isLocationEnabled()) {
         //postValue(GpsStatus.Enabled())
     } else {
        // postValue(GpsStatus.Disabled())
     }
 
-    private fun isLocationEnabled() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-    //    context.getSystemService(LocationManager::class.java)
-      //      .isProviderEnabled(LocationManager.GPS_PROVIDER)
-    } else {
-        try {
-            getInt(context?.contentResolver, LOCATION_MODE) != LOCATION_MODE_OFF
-        } catch (e: Settings.SettingNotFoundException) {
-
-            false
-        }
+    private fun isLocationEnabled(): Boolean {
+        val locMan = context?.getSystemService( Context.LOCATION_SERVICE) as LocationManager
+        return locMan.isProviderEnabled(LocationManager.GPS_PROVIDER) || locMan.isProviderEnabled(
+            LocationManager.NETWORK_PROVIDER
+        )
     }
 
-    private fun registerReceiver() = context?.registerReceiver(gpsSwitchStateReceiver,
+   private fun registerReceiver() = context?.registerReceiver(gpsSwitchStateReceiver,
        IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION)
     )
 
-    private fun unregisterReceiver() = context.unregisterReceiver(gpsSwitchStateReceiver)
+    private fun unregisterReceiver() = context?.unregisterReceiver(gpsSwitchStateReceiver)
 
     override fun onProcessTypeChanged(processType: Int) {
         Log.d("Location", "onProcessTypeChanged")
@@ -279,14 +281,14 @@ class LocationPlugin : FlutterPlugin, ActivityAware, LocationListener,
         }
     }
 
- object LocationPermissionProviderHandler:StreamHandler, LiveData<GnssStatus>(),PermissionListener{
+ object LocationPermissionProviderHandler:StreamHandler, LiveData<GnssStatus>(), PermissionListener  {
 
      init {
          handlePermissionCheck()
      }
 
      private var handler = Handler(Looper.getMainLooper())
-      var permissionEventSink: EventChannel.EventSink? = null
+     var permissionEventSink: EventChannel.EventSink? = null
 
      private val gpsObserver = Observer<GnssStatus> {
              status -> status?.let { handleGpsStatus(status) }
@@ -301,15 +303,15 @@ class LocationPlugin : FlutterPlugin, ActivityAware, LocationListener,
      }
 
      private fun handlePermissionStatus(status: Any) {
-         println("locperm chgd")
+         Log.d("LocationPermission", "handlePermissionStatus $status")
+
 
      }
-
 
      override fun onActive() = handlePermissionCheck()
      private fun handlePermissionCheck() {
         // val isPermissionGranted = ActivityCompat.checkSelfPermission(context, permissionToListen) == PackageManager.PERMISSION_GRANTED
-println("locperm chgd")
+         Log.d("LocationPermission", "handlePermissionCheck: ")
         // if (isPermissionGranted)
           //   postValue(PermissionStatus.Granted())
          //else
@@ -318,6 +320,7 @@ println("locperm chgd")
 
      override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
         permissionEventSink = events
+        //permissionProvider.requestPermissions()
      }
 
      override fun onCancel(arguments: Any?) {
@@ -332,11 +335,15 @@ println("locperm chgd")
          TODO("Not yet implemented")
      }
 
+
  }
 
     override fun onPermissionGranted(alreadyHadPermission: Boolean, limitedPermission: Boolean) {
         Log.d("Location", "onPermissionGranted")
-        LocationPermissionProviderHandler.permissionEventSink?.success(if (limitedPermission) 1 else 4)
+        val pigeonLocationPermissionData = GeneratedAndroidLocation.PigeonLocationPermissionData()
+        pigeonLocationPermissionData.pigeonLocationPermission = if (limitedPermission) 1 else 4
+        LocationPermissionProviderHandler.permissionEventSink?.success(pigeonLocationPermissionData.toList())
+        //permissionEventChannel.LocationPermissionProviderHandler.permissionEventSink?.success(if (limitedPermission) 1 else 4)
         resultPermissionRequest?.success(if (limitedPermission) 1 else 4)
         resultPermissionRequest = null
     }
@@ -354,7 +361,7 @@ println("locperm chgd")
 
     override fun onProviderDisabled(provider: String?) {
         Log.d("Location", "onProviderDisabled")
-        LocationPermissionProviderHandler.permissionEventSink?.success(0)
+        //LocationPermissionProviderHandler.permissionEventSink?.success(0)
     }
 
     override fun onRequestPermissionsResult(
@@ -363,8 +370,8 @@ println("locperm chgd")
         grantResults: IntArray
     ): Boolean {
         this.alreadyRequestedPermission = true
-        Log.d("Location", "onRequestPermissionsResult")
-        if (locationManager == null) {
+        Log.d("Location", "onRequestPermissionsResult $permissions")
+        if (locationManagerLoc2 == null) {
             if (requestCode == RequestCode.RUNTIME_PERMISSION) {
                 // Check if any of required permissions are denied.
                 var isDenied = 0
@@ -385,13 +392,13 @@ println("locperm chgd")
                 }
             }
         }
-        locationManager?.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        locationManagerLoc2?.onRequestPermissionsResult(requestCode, permissions, grantResults)
         return true
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
         Log.d("Location", "onActivityResult")
-        locationManager?.onActivityResult(requestCode, resultCode, data)
+        locationManagerLoc2?.onActivityResult(requestCode, resultCode, data)
         return true
     }
 
@@ -402,26 +409,26 @@ println("locperm chgd")
 
         resultsNeedingLocation.add(result)
 
-        val isListening = streamLocationManager != null
+        val isListening = streamLocationManagerLoc2 != null
 
         if (settings != null) {
             val locationConfiguration = getLocationConfigurationFromSettings(settings)
-            locationManager = LocationManager.Builder(context!!)
+            locationManagerLoc2 = LocationManagerLoc2.Builder(context!!)
                 .activity(activity) // Only required to ask permission and/or GoogleApi - SettingsApi
                 .configuration(locationConfiguration.build())
                 .notify(this)
                 .build()
 
-            locationManager?.get()
+            locationManagerLoc2?.get()
         } else {
             if (!isListening) {
-                locationManager = LocationManager.Builder(context!!)
+                locationManagerLoc2 = LocationManagerLoc2.Builder(context!!)
                     .activity(activity) // Only required to ask permission and/or GoogleApi - SettingsApi
                     .configuration(globalLocationConfigurationBuilder.build())
                     .notify(this)
                     .build()
 
-                locationManager?.get()
+                locationManagerLoc2?.get()
             }
 
         }
@@ -555,15 +562,15 @@ println("locperm chgd")
 
         globalLocationConfigurationBuilder = locationConfiguration
 
-        if (streamLocationManager != null) {
-            streamLocationManager?.cancel()
-            streamLocationManager = LocationManager.Builder(context!!)
+        if (streamLocationManagerLoc2 != null) {
+            streamLocationManagerLoc2?.cancel()
+            streamLocationManagerLoc2 = LocationManagerLoc2.Builder(context!!)
                 .activity(activity) // Only required to ask permission and/or GoogleApi - SettingsApi
                 .configuration(globalLocationConfigurationBuilder.keepTracking(true).build())
                 .notify(this)
                 .build()
 
-            streamLocationManager?.get()
+            streamLocationManagerLoc2?.get()
         }
 
         return true
@@ -650,16 +657,36 @@ println("locperm chgd")
         contextProcessor.activity = activity
         permissionProvider.setContextProcessor(contextProcessor)
         val hasPermission = permissionProvider.requestPermissions()
+        var status = locationPermissionStatus
+        if (status.pigeonLocationPermission != permission.index.toLong()){
+            var locationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager;
+            /*val locationPermissionRequest = registerForActivityResult(
+                ActivityResultContracts.RequestMultiplePermissions()
+            ) { permissions ->
+                when {
+                    permissions.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
+                        // Precise location access granted.
+                    }
+                    permissions.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
+                        // Only approximate location access granted.
+                    } else -> {
+                    // No location access granted.
+                }
+                }
+            } */           /*val result =
+                Context.checkSelfPermission(getApplicationContext(), ACCESS_FINE_LOCATION)
+            val result1 = Context.checkSelfPermission(getApplicationContext(), CAMERA)*/
+        }
 
         if (!hasPermission) {
             pigeonLocationPermissionData.pigeonLocationPermission = 0
             result.success(pigeonLocationPermissionData)
         } else {
-            pigeonLocationPermissionData.pigeonLocationPermission = permission.index.toLong()
-            result.success(pigeonLocationPermissionData)
-            //resultPermissionRequest = pigeonLocationPermissionData
+             result.success(pigeonLocationPermissionData)
+        //resultPermissionRequest = pigeonLocationPermissionData
         }
     }
+
 
     override fun isGPSEnabled(): Boolean {
         val locationProvider = DefaultLocationProvider()
@@ -745,20 +772,15 @@ println("locperm chgd")
 
 
     override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
-        var inBackground = false
-        if (arguments as Boolean == null){
-            inBackground = arguments as Boolean
-       }
-
         locationEventSink = events
-        streamLocationManager = LocationManager.Builder(context!!)
+        streamLocationManagerLoc2 = LocationManagerLoc2.Builder(context!!)
             .activity(activity) // Only required to ask permission and/or GoogleApi - SettingsApi
             .configuration(globalLocationConfigurationBuilder.keepTracking(true).build())
             .notify(this)
             .build()
 
-        streamLocationManager?.get()
-        if (inBackground) {
+        streamLocationManagerLoc2?.get()
+        if (arguments as Boolean) {
             flutterLocationService?.enableBackgroundMode()
         }
     }
@@ -767,14 +789,12 @@ println("locperm chgd")
         flutterLocationService?.disableBackgroundMode()
 
         locationEventSink = null
-        streamLocationManager?.cancel()
-        streamLocationManager = null
+        streamLocationManagerLoc2?.cancel()
+        streamLocationManagerLoc2 = null
     }
 
     companion object {
-        private const val STREAM_CHANNEL_NAME = "xunreal75/location2_stream"
+        private const val LOCATION_STREAM_CHANNEL_NAME = "xunreal75/location2_stream"
         private const val PERMISSION_STREAM_CHANNEL_NAME = "xunreal75/location2_permission_stream"
     }
-
-
 }

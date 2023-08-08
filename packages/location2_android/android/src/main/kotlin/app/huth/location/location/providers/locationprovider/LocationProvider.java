@@ -7,7 +7,7 @@ import android.content.Intent;
 import androidx.annotation.CallSuper;
 import androidx.annotation.Nullable;
 
-import app.huth.location.location.LocationManager;
+import app.huth.location.location.LocationManagerLoc2;
 import app.huth.location.location.configuration.LocationConfiguration;
 import app.huth.location.location.helper.LogUtils;
 import app.huth.location.location.listener.LocationListener;
@@ -23,7 +23,7 @@ public abstract class LocationProvider {
     private WeakReference<LocationListener> weakLocationListener;
 
     /**
-     * This method is called immediately once the LocationProvider is set to {@linkplain LocationManager}
+     * This method is called immediately once the LocationProvider is set to {@linkplain LocationManagerLoc2}
      */
     @CallSuper
     public void configure(ContextProcessor contextProcessor, LocationConfiguration configuration,

@@ -7,16 +7,13 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.location.Location
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
-import android.provider.Settings
 import android.util.Log
 import app.huth.location.FlutterLocationService.LocalBinder
-import app.huth.location.location.LocationManager
+import app.huth.location.location.LocationManagerLoc2
 import app.huth.location.location.configuration.Configurations.defaultConfiguration
 import app.huth.location.location.configuration.DefaultProviderConfiguration
 import app.huth.location.location.configuration.Defaults.LOCATION_PERMISSIONS
@@ -28,7 +25,6 @@ import app.huth.location.location.constants.ProcessType
 import app.huth.location.location.constants.RequestCode
 import app.huth.location.location.helper.LogUtils
 import app.huth.location.location.listener.LocationListener
-import app.huth.location.location.providers.locationprovider.DefaultLocationProvider
 import app.huth.location.location.providers.permissionprovider.DefaultPermissionProvider
 import app.huth.location.location.view.ContextProcessor
 import com.google.android.gms.location.LocationRequest
@@ -51,8 +47,8 @@ class LocationPermissionHandler: FlutterPlugin, ActivityAware, LocationListener,
 
     private var globalLocationConfigurationBuilder: LocationConfiguration.Builder =
         defaultConfiguration("The location is needed", "The GPS is needed")
-    private var locationManager: LocationManager? = null
-    private var streamLocationManager: LocationManager? = null
+    private var locationManagerLoc2: LocationManagerLoc2? = null
+    private var streamLocationManagerLoc2: LocationManagerLoc2? = null
     private var flutterLocationService: FlutterLocationService? = null
 
     private var eventChannel: EventChannel? = null
@@ -74,7 +70,7 @@ class LocationPermissionHandler: FlutterPlugin, ActivityAware, LocationListener,
 
 
     override fun onDetachedFromEngine( binding: FlutterPlugin.FlutterPluginBinding) {
-        GeneratedAndroidLocation.LocationHostApi.setup(binding.binaryMessenger, null)
+        GeneratedAndroidLocation.LocationPermissionsHostApi.setup(binding.binaryMessenger,null)
         context = null
         eventChannel = null
     }
@@ -257,7 +253,7 @@ class LocationPermissionHandler: FlutterPlugin, ActivityAware, LocationListener,
     ): Boolean {
         this.alreadyRequestedPermission = true
         Log.d("Location", "onRequestPermissionsResult")
-        if (locationManager == null) {
+        if (locationManagerLoc2 == null) {
             if (requestCode == RequestCode.RUNTIME_PERMISSION) {
                 // Check if any of required permissions are denied.
                 var isDenied = 0
@@ -278,13 +274,13 @@ class LocationPermissionHandler: FlutterPlugin, ActivityAware, LocationListener,
                 }
             }
         }
-        locationManager?.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        locationManagerLoc2?.onRequestPermissionsResult(requestCode, permissions, grantResults)
         return true
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
         Log.d("Location", "onActivityResult")
-        locationManager?.onActivityResult(requestCode, resultCode, data)
+        locationManagerLoc2?.onActivityResult(requestCode, resultCode, data)
         return true
     }
 
@@ -420,21 +416,21 @@ class LocationPermissionHandler: FlutterPlugin, ActivityAware, LocationListener,
 
     override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
         eventSink = events
-        streamLocationManager = LocationManager.Builder(context!!)
+        streamLocationManagerLoc2 = LocationManagerLoc2.Builder(context!!)
             .activity(activity) // Only required to ask permission and/or GoogleApi - SettingsApi
             .configuration(globalLocationConfigurationBuilder.keepTracking(true).build())
             .notify(this)
             .build()
 
-        streamLocationManager?.get()
+        streamLocationManagerLoc2?.get()
     }
 
     override fun onCancel(arguments: Any?) {
         flutterLocationService?.disableBackgroundMode()
 
         eventSink = null
-        streamLocationManager?.cancel()
-        streamLocationManager = null
+        streamLocationManagerLoc2?.cancel()
+        streamLocationManagerLoc2 = null
     }
 
     companion object {

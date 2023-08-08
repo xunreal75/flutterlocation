@@ -132,11 +132,10 @@ abstract class LocationHostApi {
 
 @HostApi()
 abstract class LocationPermissionsHostApi {
-
   PigeonLocationPermissionData getLocationPermissionStatus();
 
   @async
   PigeonLocationPermissionData requestLocationPermission(
-      PigeonLocationPermission permission,
-      );
+    PigeonLocationPermission permission,
+  );
 }

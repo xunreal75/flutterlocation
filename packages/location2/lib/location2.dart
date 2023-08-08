@@ -60,7 +60,7 @@ Future<LocationData> getLocation({LocationSettings? settings}) async {
 ///       );
 ///     });
 ///   }
-/// 
+///
 ///   Future<void> _stopListen() async {
 ///     await _locationSubscription?.cancel();
 ///     }

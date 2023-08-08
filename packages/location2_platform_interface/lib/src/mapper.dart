@@ -40,6 +40,4 @@ LocationPermission locationPermissionStatusFromInt(int permission) {
     default:
       return LocationPermission.unknown;
   }
-
-
 }

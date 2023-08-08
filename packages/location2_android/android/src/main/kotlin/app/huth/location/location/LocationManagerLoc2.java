@@ -20,7 +20,7 @@ import app.huth.location.location.providers.locationprovider.LocationProvider;
 import app.huth.location.location.providers.permissionprovider.PermissionProvider;
 import app.huth.location.location.view.ContextProcessor;
 
-public class LocationManager implements PermissionListener {
+public class LocationManagerLoc2 implements PermissionListener {
 
     private final LocationListener listener;
     private final LocationConfiguration configuration;
@@ -48,7 +48,7 @@ public class LocationManager implements PermissionListener {
     /**
      * To create an instance of this manager you MUST specify a LocationConfiguration
      */
-    private LocationManager(Builder builder) {
+    private LocationManagerLoc2(Builder builder) {
         this.listener = builder.listener;
         this.configuration = builder.configuration;
         this.activeProvider = builder.activeProvider;
@@ -131,7 +131,7 @@ public class LocationManager implements PermissionListener {
             return this;
         }
 
-        public LocationManager build() {
+        public LocationManagerLoc2 build() {
             if (contextProcessor == null) {
                 throw new IllegalStateException("You must set a context to LocationManager.");
             }
@@ -146,7 +146,7 @@ public class LocationManager implements PermissionListener {
 
             this.activeProvider.configure(contextProcessor, configuration, listener);
 
-            return new LocationManager(this);
+            return new LocationManagerLoc2(this);
         }
     }
 

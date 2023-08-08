@@ -21,8 +21,7 @@ class LocationData {
     this.bearingAccuracyDegrees,
     this.elapsedRealTimeNanos,
     this.elapsedRealTimeUncertaintyNanos,
-    @Deprecated('unused during newer location responses')
-    this.satellites,
+    @Deprecated('unused during newer location responses') this.satellites,
     this.speed,
     this.speedAccuracy,
     this.time,
@@ -117,11 +116,13 @@ class LocationData {
 }
 
 /// Value of raised exception
-enum LocationErrors{
+enum LocationErrors {
   /// no exception
   none,
+
   /// thrown if location service permanent disabled
   locationServiceDisabledError,
+
   /// thrown if get location failed
   locationFailedError
 }
@@ -306,7 +307,7 @@ class LocationSettings {
     this.expirationTime,
     this.fastestInterval = 500,
     this.interval = 1000,
-    this.maxWaitTime =3000,
+    this.maxWaitTime = 3000,
     this.numUpdates,
     this.acceptableAccuracy,
     this.accuracy = LocationAccuracy.high,

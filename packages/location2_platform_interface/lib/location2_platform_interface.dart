@@ -48,7 +48,6 @@ abstract class LocationPlatform extends PlatformInterface {
   /// Return a stream of the user's location.
   Stream<LocationData?> onLocationChanged({bool inBackground = false});
 
-
   /// Set new global location settings for the app
   Future<bool?> setLocationSettings(LocationSettings settings);
 
@@ -123,8 +122,6 @@ abstract class LocationPermissionPlatform extends PlatformInterface {
   /// Request location permission for the app
   /// [LocationPermissionData]
   Future<LocationPermissionData?> requestLocationPermission(
-      LocationPermission locationPermission,
-      );
-
-
+    LocationPermission locationPermission,
+  );
 }

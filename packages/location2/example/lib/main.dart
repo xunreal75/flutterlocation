@@ -35,7 +35,7 @@ class MyHomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text(title!),
       ),
-      body:  const SingleChildScrollView(
+      body: const SingleChildScrollView(
         child: Column(
           children: <Widget>[
             SizedBox(height: 16),
@@ -52,7 +52,6 @@ class MyHomePage extends StatelessWidget {
             ChangeSettings(),
             Divider(height: 32),
             ChangeNotificationWidget(),
-
           ],
         ),
       ),

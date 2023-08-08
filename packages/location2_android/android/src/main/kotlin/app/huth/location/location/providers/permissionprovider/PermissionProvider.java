@@ -8,9 +8,8 @@ import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 
-import app.huth.location.location.LocationManager;
+import app.huth.location.location.LocationManagerLoc2;
 import app.huth.location.location.helper.LogUtils;
 import app.huth.location.location.listener.PermissionListener;
 import app.huth.location.location.providers.dialogprovider.DialogProvider;
@@ -26,7 +25,7 @@ public abstract class PermissionProvider {
     private DialogProvider rationalDialogProvider;
 
     /**
-     * This class is responsible to get required permissions, and notify {@linkplain LocationManager}.
+     * This class is responsible to get required permissions, and notify {@linkplain LocationManagerLoc2}.
      *
      * @param requiredPermissions are required, setting this field empty will {@throws IllegalStateException}
      * @param rationaleDialogProvider will be used to display rationale dialog when it is necessary. If this field is set
@@ -77,7 +76,7 @@ public abstract class PermissionProvider {
     }
 
     /**
-     * This will be set internally by {@linkplain LocationManager} before any call is executed on PermissionProvider
+     * This will be set internally by {@linkplain LocationManagerLoc2} before any call is executed on PermissionProvider
      */
     @CallSuper
     public void setContextProcessor(ContextProcessor contextProcessor) {
@@ -85,7 +84,7 @@ public abstract class PermissionProvider {
     }
 
     /**
-     * This will be set internally by {@linkplain LocationManager} before any call is executed on PermissionProvider
+     * This will be set internally by {@linkplain LocationManagerLoc2} before any call is executed on PermissionProvider
      */
     @CallSuper public void setPermissionListener(PermissionListener permissionListener) {
         this.weakPermissionListener = new WeakReference<>(permissionListener);

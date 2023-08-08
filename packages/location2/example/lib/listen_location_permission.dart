@@ -32,6 +32,10 @@ class _ListenLocationPermissionWidgetState
       if (err is PlatformException) {
         setState(() {
           _error = err.code;
+          if (kDebugMode)
+          {
+            print('listenLocationPermission error $err');
+          }
         });
       }
       _locationPermissionSubscription?.cancel();

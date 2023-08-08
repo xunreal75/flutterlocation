@@ -6,34 +6,34 @@ import android.os.Bundle;
 
 import androidx.annotation.CallSuper;
 
-import app.huth.location.location.LocationManager;
+import app.huth.location.location.LocationManagerLoc2;
 import app.huth.location.location.configuration.LocationConfiguration;
 import app.huth.location.location.constants.ProcessType;
 import app.huth.location.location.listener.LocationListener;
 
 public abstract class LocationBaseService extends Service implements LocationListener {
 
-    private LocationManager locationManager;
+    private LocationManagerLoc2 locationManagerLoc2;
 
     public abstract LocationConfiguration getLocationConfiguration();
 
     @CallSuper
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        locationManager = new LocationManager.Builder(getApplicationContext())
+        locationManagerLoc2 = new LocationManagerLoc2.Builder(getApplicationContext())
               .configuration(getLocationConfiguration())
               .notify(this)
               .build();
         return super.onStartCommand(intent, flags, startId);
     }
 
-    protected LocationManager getLocationManager() {
-        return locationManager;
+    protected LocationManagerLoc2 getLocationManager() {
+        return locationManagerLoc2;
     }
 
     protected void getLocation() {
-        if (locationManager != null) {
-            locationManager.get();
+        if (locationManagerLoc2 != null) {
+            locationManagerLoc2.get();
         } else {
             throw new IllegalStateException("locationManager is null. "
                   + "Make sure you call super.onStartCommand before attempting to getLocation");
