@@ -1,3 +1,7 @@
+## 6.0.4
+
+ - added LocationPermissionPlatform and permissions
+
 ## 6.0.1
 
  - reinit und upgrade

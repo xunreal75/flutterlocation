@@ -1,8 +1,8 @@
 name: location2
 description: This library aims at providing you a simple way to get the user location without thinking about permission.
-homepage: https://docs.page/Xunreal75/flutterlocation
-repository: https://github.com/Xunreal75/flutterlocation
-issue_tracker: https://github.com/Xunreal75/flutterlocation/issues?q=is%3Aissue+is%3Aopen
+homepage: https://docs.page/xunreal75/flutterlocation
+repository: https://github.com/xunreal75/flutterlocation
+issue_tracker: https://github.com/xunreal75/flutterlocation/issues?q=is%3Aissue+is%3Aopen
 version: 6.0.4
 
 environment:
@@ -33,7 +33,7 @@ dependencies:
   #   path: ../location_linux
   location2_ios: ^6.0.4
   location2_macos: ^6.0.1
-  location2_platform_interface: ^6.0.1
+  location2_platform_interface: ^6.0.4
   location2_web: ^6.0.1
   # location_windows:
   #   path: ../location_windows

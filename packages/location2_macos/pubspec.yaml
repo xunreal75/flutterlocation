@@ -19,7 +19,7 @@ flutter:
 dependencies:
   flutter:
     sdk: flutter
-  location2_platform_interface: ^6.0.1
+  location2_platform_interface: ^6.0.4
 dev_dependencies:
   flutter_test:
     sdk: flutter
