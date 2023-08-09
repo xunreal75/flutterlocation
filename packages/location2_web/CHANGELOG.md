@@ -1,3 +1,7 @@
+## 6.0.4
+
+ - bump version
+
 ## 6.0.1
 
  - error on creation
