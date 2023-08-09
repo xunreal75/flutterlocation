@@ -1,3 +1,7 @@
+## 6.0.4
+
+ - fixed request in android TODO - listener for permissions
+
 ## 6.0.2
 
  - added timestamp on Android

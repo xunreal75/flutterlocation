@@ -28,7 +28,7 @@ flutter:
 dependencies:
   flutter:
     sdk: flutter
-  location2_android: ^6.0.2
+  location2_android: ^6.0.4
   # location_linux:
   #   path: ../location_linux
   location2_ios: ^6.0.1
