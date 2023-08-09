@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
+import app.huth.location.GeneratedAndroidLocation;
 import app.huth.location.location.LocationManagerLoc2;
 import app.huth.location.location.helper.LogUtils;
 import app.huth.location.location.listener.PermissionListener;
@@ -42,8 +43,15 @@ public abstract class PermissionProvider {
 
     /**
      * Return true if it is possible to ask permission, false otherwise
+     * Please use requestLocationPermissions()
      */
+    @Deprecated()
     public abstract boolean requestPermissions();
+
+    /**
+     * Return true if it is possible to ask permission, false otherwise
+     */
+    public abstract GeneratedAndroidLocation.PigeonLocationPermission checkLocationPermissions();
 
     /**
      * This method needs to be called when permission results are received

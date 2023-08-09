@@ -1075,7 +1075,6 @@ public class GeneratedAndroidLocation {
         case (byte) 128:
           return PigeonLocationData.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 129:
-          return PigeonLocationSettings.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 130:
           return PigeonLocationSettings.fromList((ArrayList<Object>) readValue(buffer));
         case (byte) 131:

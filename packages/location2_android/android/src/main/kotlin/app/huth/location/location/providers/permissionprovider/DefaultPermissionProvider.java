@@ -1,10 +1,12 @@
 package app.huth.location.location.providers.permissionprovider;
 
+import android.app.Activity;
 import android.content.pm.PackageManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import app.huth.location.GeneratedAndroidLocation;
 import app.huth.location.location.constants.RequestCode;
 import app.huth.location.location.helper.LogUtils;
 import app.huth.location.location.listener.DialogListener;
@@ -16,6 +18,33 @@ public class DefaultPermissionProvider extends PermissionProvider implements Dia
 
     public DefaultPermissionProvider(String[] requiredPermissions, @Nullable DialogProvider dialogProvider) {
         super(requiredPermissions, dialogProvider);
+    }
+
+    public GeneratedAndroidLocation.PigeonLocationPermission checkLocationPermissions(){
+        if (getActivity() == null) {
+            LogUtils.logI("Cannot ask for permissions, "
+                    + "because DefaultPermissionProvider doesn't contain an Activity instance.");
+            return GeneratedAndroidLocation.PigeonLocationPermission.NOT_DETERMINED;
+        }
+        Activity activity = getActivity();
+        boolean hasForegroundLocationPermission = false;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            hasForegroundLocationPermission = activity.checkSelfPermission(
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION.toString()) == PackageManager.PERMISSION_GRANTED;
+        }
+        if (hasForegroundLocationPermission) {
+            boolean hasBackgroundLocationPermission = false;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                hasBackgroundLocationPermission = activity.checkSelfPermission(
+                        android.Manifest.permission.ACCESS_BACKGROUND_LOCATION.toString()) == PackageManager.PERMISSION_GRANTED;
+                if (hasBackgroundLocationPermission) return GeneratedAndroidLocation.PigeonLocationPermission.AUTHORIZED_ALWAYS;
+               return GeneratedAndroidLocation.PigeonLocationPermission.AUTHORIZED_WHEN_IN_USE;
+             }
+        }
+        else {
+            return GeneratedAndroidLocation.PigeonLocationPermission.DENIED;
+        }
+        return GeneratedAndroidLocation.PigeonLocationPermission.NOT_DETERMINED;
     }
 
     @Override

@@ -2,6 +2,7 @@ package app.huth.location.location.providers.permissionprovider;
 
 import androidx.annotation.NonNull;
 
+import app.huth.location.GeneratedAndroidLocation;
 import app.huth.location.location.configuration.Defaults;
 import app.huth.location.location.providers.permissionprovider.PermissionProvider;
 
@@ -14,6 +15,10 @@ public class StubPermissionProvider extends PermissionProvider {
     @Override
     public boolean requestPermissions() {
         return false;
+    }
+
+    @Override
+    public GeneratedAndroidLocation.PigeonLocationPermission checkLocationPermissions() {return GeneratedAndroidLocation.PigeonLocationPermission.UNKNOWN;
     }
 
     @Override
