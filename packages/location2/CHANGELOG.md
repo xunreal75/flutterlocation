@@ -1,3 +1,7 @@
+## 6.0.4
+
+ - Fixed location example and permissionrequests
+
 ## 6.0.2
 
  - Readme fixed
