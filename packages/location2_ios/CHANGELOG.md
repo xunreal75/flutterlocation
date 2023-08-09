@@ -1,3 +1,7 @@
+## 6.0.4
+
+ - fixed requesting and lister for permissions
+
 ## 6.0.1
 
  - Update a dependency to the latest release.

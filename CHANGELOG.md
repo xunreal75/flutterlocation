@@ -15,6 +15,34 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`location2_ios` - `v6.0.4`](#location2_ios---v604)
+ - [`location2` - `v6.0.5`](#location2---v605)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `location2` - `v6.0.5`
+
+---
+
+#### `location2_ios` - `v6.0.4`
+
+ - fixed requesting and lister for permissions
+
+
+## 2023-08-09
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`location2_android` - `v6.0.4`](#location2_android---v604)
  - [`location2` - `v6.0.5`](#location2---v605)
 

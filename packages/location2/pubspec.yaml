@@ -31,7 +31,7 @@ dependencies:
   location2_android: ^6.0.4
   # location_linux:
   #   path: ../location_linux
-  location2_ios: ^6.0.1
+  location2_ios: ^6.0.4
   location2_macos: ^6.0.1
   location2_platform_interface: ^6.0.1
   location2_web: ^6.0.1
